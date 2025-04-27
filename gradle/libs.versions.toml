@@ -1,15 +1,25 @@
 [versions]
 agp = "8.8.0"
+appcompatVersion = "1.7.0"
+commonSdk = "0.0.3"
 coreSplashscreen = "1.0.1"
-junit = "4.14-SNAPSHOT"
+junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-appcompat = "1.6.1"
-material = "1.11.0"
+appcompat = "1.7.0"
+material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
+mobileSdk = "1.0.3"
+playServicesGcm = "17.0.0"
+playServicesLocation = "21.3.0"
+playServicesLocationVersion = "21.0.1"
+playServicesMaps = "19.2.0"
+sdpAndroid = "1.1.0"
+servicesSdk = "1.0.0"
 
 [libraries]
+common-sdk = { module = "neshan-android-sdk:common-sdk", version.ref = "commonSdk" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -18,6 +28,12 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+mobile-sdk = { module = "neshan-android-sdk:mobile-sdk", version.ref = "mobileSdk" }
+play-services-gcm = { module = "com.google.android.gms:play-services-gcm", version.ref = "playServicesGcm" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+services-sdk = { module = "neshan-android-sdk:services-sdk", version.ref = "servicesSdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

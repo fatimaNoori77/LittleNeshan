@@ -22,10 +22,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'armeabi-v7a'
+//            universalApk false
+//        }
+//    }
 }
 
 dependencies {
@@ -39,4 +53,17 @@ dependencies {
     androidTestImplementation libs.espresso.core
 
     implementation libs.core.splashscreen
+
+    //Neshan sdk library
+    implementation libs.mobile.sdk
+    implementation libs.services.sdk
+    implementation libs.common.sdk
+
+    //Play Services
+    implementation libs.play.services.gcm
+    implementation libs.play.services.location
+    implementation libs.play.services.maps
+
+    implementation libs.sdp.android
+
 }
