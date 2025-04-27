@@ -66,4 +66,15 @@ dependencies {
 
     implementation libs.sdp.android
 
+    // Retrofit
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.okhttp
+    implementation libs.logging.interceptor
+
+    // Lifecycle ViewModel + LiveData
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.lifecycle.livedata.ktx
+
+
 }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     private ActivityMainBinding binding;
     private MapView map;
     private Location currentLocation;
+    private DirectionViewModel viewModel;
 
 
     @Override
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity
         getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         setContentView(binding.getRoot());
+        viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
+
     }
 
     @Override
@@ -45,7 +50,22 @@ public class MainActivity extends AppCompatActivity
 
         initMap();
         initViews();
+        initObservers();
+    }
 
+    private void initObservers() {
+        viewModel.getRoutResult().observe(this, result -> {
+            if (result instanceof ApiResult.Loading) {
+                // Show loading indicator
+                Log.d("MainActivity", "Loading...");
+            } else if (result instanceof ApiResult.Success) {
+                RouteResponse rout = ((ApiResult.Success<RouteResponse>) result).getData();
+                Log.d("MainActivity", "rout Title: " + rout.getRoutes());
+            } else if (result instanceof ApiResult.Error) {
+                String error = ((ApiResult.Error<RouteResponse>) result).getThrowable();
+                Log.e("MainActivity", "Error: " + error);
+            }
+        });
     }
 
     private void initMap() {
@@ -77,6 +97,20 @@ public class MainActivity extends AppCompatActivity
         map.setBearing(90.0f, 0f);
         map.setTilt(60.0f, 0f);
         map.setZoom(14f,0f);
+
+        RoutRequestInputs inputs = new RoutRequestInputs(
+                "car",
+                currentLocation.getLatitude() + "," + currentLocation.getLongitude(),
+                destination.getLatitude() + "," + destination.getLongitude()
+        );
+
+        inputs.setAvoidTrafficZone(true);
+        inputs.setAlternative(false);
+        inputs.setBearing(90);
+
+        viewModel.getRoute(inputs, "service.7e63ad2d618b43c49c5243bc7e163996");
+
+
     }
 
     private void moveToCurrentLocation() {
