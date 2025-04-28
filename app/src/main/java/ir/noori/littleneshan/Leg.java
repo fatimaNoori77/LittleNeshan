@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.neshan.common.model.Distance;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Leg {
     @SerializedName("summary")
@@ -17,7 +17,7 @@ public class Leg {
     private Duration duration;
 
     @SerializedName("steps")
-    private List<Step> steps;
+    private ArrayList<Step> steps;
 
     public String getSummary() {
         return summary;
@@ -31,7 +31,7 @@ public class Leg {
         return duration;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Step> getSteps() {
         return steps;
     }
 }

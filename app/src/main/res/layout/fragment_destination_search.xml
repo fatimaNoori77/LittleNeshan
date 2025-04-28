@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:layoutDirection="rtl"
     android:padding="16dp">
 
     <EditText
-        android:hint="مقصدت کجاست؟"
-        android:textSize="@dimen/_14sdp"
+        android:hint="@string/hint_destination"
+        android:textSize="@dimen/_12sdp"
         android:textColor="@color/black"
-        android:background="@color/white"
+        android:background="@drawable/bg_gray"
         android:id="@+id/edtDestination"
         android:layout_marginBottom="@dimen/_10sdp"
         android:padding="@dimen/_10sdp"
@@ -22,6 +24,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:listitem="@layout/item_address"
         android:layout_marginTop="16dp" />
 
 </LinearLayout>

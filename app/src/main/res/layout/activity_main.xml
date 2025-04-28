@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layoutDirection="rtl"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <org.neshan.mapsdk.MapView
@@ -34,27 +33,97 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardClose"
+        android:visibility="gone"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="@dimen/_50sdp"
+        app:cardElevation="@dimen/_3sdp"
+        app:layout_constraintBottom_toTopOf="@id/cardAddress"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_close" />
+
+    </androidx.cardview.widget.CardView>
+
     <RelativeLayout
         android:id="@+id/cardAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
         android:background="@drawable/bg_white_top_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-    <EditText
-        android:hint="مقصدت کجاست؟"
-        android:textSize="@dimen/_14sdp"
-        android:textColor="@color/black"
-        android:background="@drawable/bg_gray"
-        android:layout_margin="@dimen/_10sdp"
-        android:id="@+id/edtDestination"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:padding="@dimen/_10sdp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/edtDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/bg_gray"
+            android:hint="@string/hint_destination"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
+
+        <LinearLayout
+            android:id="@+id/llMoreOptions"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtDestination"
+            android:orientation="horizontal">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipDriving"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/CustomChipTextAppearance"
+                    app:chipIconSize="@dimen/_15sdp"
+                    app:chipStartPadding="@dimen/_10sdp"
+                    app:chipEndPadding="@dimen/_10sdp"
+                    app:chipIcon="@drawable/ic_navigation"
+                    android:text="@string/driving_mode"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@drawable/ic_bookmark"
+                    android:textAppearance="@style/CustomChipTextAppearance"
+                    app:chipIconSize="@dimen/_15sdp"
+                    app:chipStartPadding="@dimen/_10sdp"
+                    app:chipEndPadding="@dimen/_10sdp"
+                    android:text="@string/save"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipIcon="@drawable/ic_share"
+                    android:textAppearance="@style/CustomChipTextAppearance"
+                    app:chipIconSize="@dimen/_15sdp"
+                    app:chipStartPadding="@dimen/_10sdp"
+                    app:chipEndPadding="@dimen/_10sdp"
+                    android:text="@string/share"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </LinearLayout>
 
     </RelativeLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

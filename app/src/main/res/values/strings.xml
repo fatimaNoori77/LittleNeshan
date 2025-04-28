@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">نشانک</string>
+    <string name="save">ذخیره</string>
+    <string name="driving_mode">رانندگی</string>
+    <string name="share">ارسال</string>
+    <string name="hint_destination">مقصدت کجاست؟</string>
 </resources>

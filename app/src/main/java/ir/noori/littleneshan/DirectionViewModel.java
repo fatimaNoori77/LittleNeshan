@@ -11,14 +11,14 @@ public class DirectionViewModel extends ViewModel {
         this.repository = new DirectionRepository();
     }
 
-    private  MutableLiveData<ApiResult<RouteResponse>> routResult = new MutableLiveData<>();
-    public LiveData<ApiResult<RouteResponse>> getRoutResult() {
+    private  MutableLiveData<RouteResponse> routResult = new MutableLiveData<>();
+    public LiveData<RouteResponse> getRoutResult() {
         return routResult;
     }
 
     public void getRoute(RoutRequestInputs inputs, String apiKey) {
-        LiveData<ApiResult<RouteResponse>> repositoryLiveData = repository.getRoute(inputs, apiKey);
-        routResult =(MutableLiveData<ApiResult<RouteResponse>>) repositoryLiveData;
+        routResult = repository.getRoute(inputs, apiKey);
+
     }
 
 }

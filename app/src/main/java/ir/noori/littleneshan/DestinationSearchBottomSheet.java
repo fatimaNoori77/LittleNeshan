@@ -51,6 +51,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     public void onStart() {
         super.onStart();
         // Make the bottom sheet full screen when opened
+        binding.edtDestination.requestFocus();
         if (getDialog() != null && getDialog().getWindow() != null) {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
             FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);

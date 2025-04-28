@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "https://api.neshan.org/v4/";
+    private static final String BASE_URL = "https://api.neshan.org/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

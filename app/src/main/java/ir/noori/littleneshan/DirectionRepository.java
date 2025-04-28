@@ -1,5 +1,7 @@
 package ir.noori.littleneshan;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import retrofit2.Call;
@@ -13,8 +15,8 @@ public class DirectionRepository {
         this.apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public  MutableLiveData<ApiResult<RouteResponse>> getRoute(RoutRequestInputs inputs, String apiKey){
-        MutableLiveData<ApiResult<RouteResponse>> route = new MutableLiveData<>();
+    public MutableLiveData<RouteResponse> getRoute(RoutRequestInputs inputs, String apiKey){
+        MutableLiveData<RouteResponse> route = new MutableLiveData<>();
         apiService.getRoute(
                 inputs.getType(),
                 inputs.getOrigin(),
@@ -27,16 +29,17 @@ public class DirectionRepository {
                 apiKey).enqueue(new Callback<RouteResponse>() {
             @Override
             public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    route.setValue(new ApiResult.Success<>(response.body()));
+                if (response.isSuccessful()) {
+                    Log.i("TAG", "getRoute000000: "+ response.isSuccessful());
+                    route.setValue(response.body());
                 } else {
-                    route.setValue(new ApiResult.Error<>(response.message()));
+                    route.setValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable t) {
-                route.setValue(new ApiResult.Error<>(t.getMessage()));
+                route.setValue(null);
             }
         });
         return route;
