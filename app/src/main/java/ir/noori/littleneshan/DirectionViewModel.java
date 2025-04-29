@@ -4,21 +4,65 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.List;
+
 public class DirectionViewModel extends ViewModel {
 
     private final DirectionRepository repository;
     public DirectionViewModel() {
         this.repository = new DirectionRepository();
     }
+    private final MutableLiveData<List<Step>> stepsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> instructionLiveData = new MutableLiveData<>();
+    private List<Step> currentSteps;
+    private int currentStepIndex = 0;
 
+    public LiveData<List<Step>> getStepsLiveData() {
+        return stepsLiveData;
+    }
+
+    public LiveData<String> getInstructionLiveData() {
+        return instructionLiveData;
+    }
     private  MutableLiveData<RouteResponse> routResult = new MutableLiveData<>();
     public LiveData<RouteResponse> getRoutResult() {
         return routResult;
     }
 
     public void getRoute(RoutRequestInputs inputs, String apiKey) {
-        routResult = repository.getRoute(inputs, apiKey);
+        repository.getRoute(inputs, apiKey).observeForever(response->{
+            if (response != null) {
+                routResult.setValue(response);
+                List<Step> steps = response.getRoutes().get(0).getLegs().get(0).getSteps();
+                this.currentSteps = steps;
+                stepsLiveData.setValue(steps);
 
+                if (!steps.isEmpty()) {
+                    currentStepIndex = 0;
+                    instructionLiveData.setValue(steps.get(0).getInstruction());
+                }
+            } else {
+                routResult.setValue(null);
+            }
+        });
+    }
+
+    public void nextStep() {
+        if (currentSteps != null && currentStepIndex < currentSteps.size() - 1) {
+            currentStepIndex++;
+            instructionLiveData.setValue(currentSteps.get(currentStepIndex).getInstruction());
+        }
+    }
+
+    public Step getCurrentStep() {
+        if (currentSteps != null && !currentSteps.isEmpty()) {
+            return currentSteps.get(currentStepIndex);
+        }
+        return null;
+    }
+
+    public boolean isLastStep() {
+        return currentSteps != null && currentStepIndex >= currentSteps.size() - 1;
     }
 
 }

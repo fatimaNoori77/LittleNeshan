@@ -2,6 +2,7 @@ package ir.noori.littleneshan;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import retrofit2.Call;
@@ -15,7 +16,7 @@ public class DirectionRepository {
         this.apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public MutableLiveData<RouteResponse> getRoute(RoutRequestInputs inputs, String apiKey){
+    public LiveData<RouteResponse> getRoute(RoutRequestInputs inputs, String apiKey){
         MutableLiveData<RouteResponse> route = new MutableLiveData<>();
         apiService.getRoute(
                 inputs.getType(),
