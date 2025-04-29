@@ -1,7 +1,6 @@
 package ir.noori.littleneshan;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,11 +90,13 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
         SearchTextWatcher.attachTo(binding.edtDestination, query -> {
             performSearch();
         });
+        binding.imgClose.setOnClickListener(v -> {
+            dismiss();
+        });
     }
 
     private void initObservers() {
         viewModel.getSearchResult().observe(getViewLifecycleOwner(), result -> {
-            Log.i("TAG", "initObservers: " + result);
             if (result != null) {
                 addresses.clear();
                 addresses.addAll(result.getItems());

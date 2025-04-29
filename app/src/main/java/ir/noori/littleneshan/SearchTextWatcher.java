@@ -10,7 +10,7 @@ public class SearchTextWatcher implements TextWatcher {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
-    private static final long DELAY_MILLIS = 2000; // 2 seconds delay
+    private static final long DELAY_MILLIS = 1000; // 1 seconds delay
     private final SearchCallback callback;
 
     public interface SearchCallback {

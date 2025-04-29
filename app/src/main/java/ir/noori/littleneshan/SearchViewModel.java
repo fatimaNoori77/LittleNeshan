@@ -1,7 +1,5 @@
 package ir.noori.littleneshan;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,10 +21,15 @@ public class SearchViewModel extends ViewModel {
         return isLoading;
     }
 
-    public LiveData<SearchResponse> searchAddress(String apiKey, String term, double lat, double lng) {
-        LiveData<SearchResponse> data = repository.searchAddress(apiKey, term, lat, lng);
-        Log.i("TAG", "searchAddress: " + data.getValue().getItems());
-        return data;
-
+    public void searchAddress(String apiKey, String term, double lat, double lng) {
+        isLoading.setValue(true);
+        repository.searchAddress(apiKey, term, lat, lng).observeForever(response -> {
+            isLoading.setValue(false);
+            if (response != null) {
+                searchResult.setValue(response);
+            } else {
+                searchResult.setValue(null);
+            }
+        });
     }
 }

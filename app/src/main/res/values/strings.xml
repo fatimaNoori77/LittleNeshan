@@ -4,4 +4,6 @@
     <string name="driving_mode">رانندگی</string>
     <string name="share">ارسال</string>
     <string name="hint_destination">مقصدت کجاست؟</string>
+    <string name="work">محل کار</string>
+    <string name="home">خانه</string>
 </resources>

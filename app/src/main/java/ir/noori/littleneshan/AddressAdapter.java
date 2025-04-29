@@ -49,8 +49,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Destinat
         }
 
         void bind(SearchItem destination) {
-            binding.destinationName.setText(destination.getAddress());
-            binding.destinationAddress.setText(destination.getAddress());
+            binding.txtAddressTitle.setText(destination.getTitle());
+            binding.txtAddress.setText(destination.getAddress());
 
             binding.getRoot().setOnClickListener(v -> {
                 if (listener != null) {

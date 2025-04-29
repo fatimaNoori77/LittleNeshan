@@ -8,16 +8,60 @@
     android:layoutDirection="rtl"
     android:padding="16dp">
 
-    <EditText
-        android:hint="@string/hint_destination"
-        android:textSize="@dimen/_12sdp"
-        android:textColor="@color/black"
-        android:background="@drawable/bg_gray"
-        android:id="@+id/edtDestination"
-        android:layout_marginBottom="@dimen/_10sdp"
-        android:padding="@dimen/_10sdp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:hint="@string/hint_destination"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/black"
+            android:id="@+id/edtDestination"
+            android:background="@drawable/bg_gray"
+            android:padding="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:padding="@dimen/_5sdp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            app:tint="@color/black"
+            android:src="@drawable/ic_close" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <com.google.android.material.chip.Chip
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/CustomChipTextAppearance"
+        app:chipIconSize="@dimen/_15sdp"
+        app:chipStartPadding="@dimen/_10sdp"
+        app:chipEndPadding="@dimen/_10sdp"
+        app:chipIcon="@drawable/ic_home"
+        android:text="@string/home"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:chipIcon="@drawable/ic_briefcase"
+        android:textAppearance="@style/CustomChipTextAppearance"
+        app:chipIconSize="@dimen/_15sdp"
+        app:chipStartPadding="@dimen/_10sdp"
+        app:chipEndPadding="@dimen/_10sdp"
+        android:text="@string/work"/>
+
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/destinationsRecyclerView"
