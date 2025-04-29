@@ -9,14 +9,14 @@ import ir.noori.littleneshan.databinding.ItemAddressBinding;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.DestinationViewHolder> {
 
-    private List<AddressModel> destinations;
+    private List<SearchItem> destinations;
     private OnDestinationClickListener listener;
 
     public interface OnDestinationClickListener {
-        void onDestinationClick(AddressModel destination);
+        void onDestinationClick(SearchItem destination);
     }
 
-    public AddressAdapter(List<AddressModel> destinations, OnDestinationClickListener listener) {
+    public AddressAdapter(List<SearchItem> destinations, OnDestinationClickListener listener) {
         this.destinations = destinations;
         this.listener = listener;
     }
@@ -31,7 +31,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Destinat
 
     @Override
     public void onBindViewHolder(@NonNull DestinationViewHolder holder, int position) {
-        AddressModel destination = destinations.get(position);
+        SearchItem destination = destinations.get(position);
         holder.bind(destination);
     }
 
@@ -48,8 +48,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Destinat
             this.binding = binding;
         }
 
-        void bind(AddressModel destination) {
-            binding.destinationName.setText(destination.getName());
+        void bind(SearchItem destination) {
+            binding.destinationName.setText(destination.getAddress());
             binding.destinationAddress.setText(destination.getAddress());
 
             binding.getRoot().setOnClickListener(v -> {

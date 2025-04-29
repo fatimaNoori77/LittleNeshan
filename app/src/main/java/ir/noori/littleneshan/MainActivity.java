@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     private Location currentLocation;
     private LatLng selectedDestination;
     private DirectionViewModel viewModel;
-
+    SharedPreferencesUtility preferences ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
-
+        preferences = SharedPreferencesUtility.getInstance(getApplicationContext());
     }
 
     @Override
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDestinationSelected(AddressModel destination) {
+    public void onDestinationSelected(SearchItem destination) {
         binding.edtDestination.setText(destination.getAddress());
-        selectedDestination = new LatLng(destination.getLatitude(), destination.getLongitude());
+        selectedDestination = new LatLng(destination.getLocation().getY(), destination.getLocation().getX());
         map.moveCamera(selectedDestination, 0);
         map.addMarker(createMarker(selectedDestination));
         map.setZoom(17f, 0f);
@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
                         currentLocation = location;
+                        preferences.saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
                         map.setMyLocationEnabled(true);
                         map.moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 0);
                         map.setZoom(17f, 0);

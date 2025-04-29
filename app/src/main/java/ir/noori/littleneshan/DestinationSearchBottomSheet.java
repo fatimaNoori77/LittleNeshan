@@ -1,6 +1,7 @@
 package ir.noori.littleneshan;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -20,12 +22,15 @@ import ir.noori.littleneshan.databinding.FragmentDestinationSearchBinding;
 
 public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     private AddressAdapter adapter;
-    private List<AddressModel> addresses = new ArrayList<>(); // Initialize with empty list
+    private List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
     private FragmentDestinationSearchBinding binding;
     private DestinationSelectionListener listener;
+    private SearchViewModel viewModel;
+    SharedPreferencesUtility preferences;
+
 
     public interface DestinationSelectionListener {
-        void onDestinationSelected(AddressModel destination);
+        void onDestinationSelected(SearchItem destination);
     }
 
     public void setDestinationSelectionListener(DestinationSelectionListener listener) {
@@ -45,13 +50,15 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDestinationSearchBinding.inflate(inflater, container, false);
+        viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        preferences = SharedPreferencesUtility.getInstance(getContext());
         return binding.getRoot();
     }
+
     @Override
     public void onStart() {
         super.onStart();
         // Make the bottom sheet full screen when opened
-        binding.edtDestination.requestFocus();
         if (getDialog() != null && getDialog().getWindow() != null) {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
             FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
@@ -72,20 +79,32 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
+        initObservers();
     }
 
     private void setupViews() {
-        // Setup search functionality
+        binding.edtDestination.requestFocus();
         binding.edtDestination.setOnEditorActionListener((v, actionId, event) -> {
-            // Handle search action
             performSearch();
             return true;
         });
+        SearchTextWatcher.attachTo(binding.edtDestination, query -> {
+            performSearch();
+        });
+    }
 
-        addresses.add(new AddressModel("1", "خانه", "میدان شهدا", 36.29873381213554,59.60644999872008));
-        addresses.add(new AddressModel("2", "محل کار", "سحاد ۲۱ نبش امین ۲ پلاک ۲۸", 36.31947365295402,59.544782018791157));
-        addresses.add(new AddressModel("3", "کلینیک", " بلوار سید رضی، عدل ۸", 36.324848468582076,59.51894676720207));
-        addresses.add(new AddressModel("4", "آموزشگاه", "پیروزی ۷۰", 36.32552135284385,59.48073720130864));
+    private void initObservers() {
+        viewModel.getSearchResult().observe(getViewLifecycleOwner(), result -> {
+            Log.i("TAG", "initObservers: " + result);
+            if (result != null) {
+                addresses.clear();
+                addresses.addAll(result.getItems());
+                setAdapter();
+            }
+        });
+    }
+
+    private void setAdapter() {
         adapter = new AddressAdapter(addresses, destination -> {
             if (listener != null) {
                 listener.onDestinationSelected(destination);
@@ -99,8 +118,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     private void performSearch() {
         String query = binding.edtDestination.getText().toString().trim();
         if (!query.isEmpty()) {
-            // Perform your search logic here
-            // Update RecyclerView with results
+            viewModel.searchAddress("service.e1818ace4a9a49a89328232697bbd9e8", query, preferences.getLatitude(), preferences.getLongitude());
         }
     }
 
