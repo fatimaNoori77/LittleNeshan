@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.carto.styles.MarkerStyle;
@@ -27,7 +29,7 @@ import org.neshan.mapsdk.model.Marker;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
-        implements DestinationSearchBottomSheet.DestinationSelectionListener {
+        implements SearchAddressFragment.DestinationSelectionListener {
     private ActivityMainBinding binding;
     private MapView map;
     private Location currentLocation;
@@ -107,9 +109,15 @@ public class MainActivity extends AppCompatActivity
 
     private void showDestinationSearchBottomSheet() {
         binding.edtDestination.clearFocus();
-        DestinationSearchBottomSheet bottomSheet = new DestinationSearchBottomSheet();
-        bottomSheet.setDestinationSelectionListener(this);
-        bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+        final String TAG = SearchAddressFragment.TAG;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment existingFragment = fragmentManager.findFragmentByTag(TAG);
+        if (existingFragment == null) {
+            SearchAddressFragment bottomSheet = new SearchAddressFragment();
+            bottomSheet.setDestinationSelectionListener(this);
+            bottomSheet.show(fragmentManager, TAG);
+        }
+
     }
 
     @Override

@@ -19,12 +19,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.noori.littleneshan.databinding.FragmentDestinationSearchBinding;
+import ir.noori.littleneshan.databinding.FragmentSearchAddressBinding;
 
-public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
+public class SearchAddressFragment extends BottomSheetDialogFragment {
+    public static final String TAG = SearchAddressFragment.class.getSimpleName();
     private AddressAdapter adapter;
     private List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
-    private FragmentDestinationSearchBinding binding;
+    private FragmentSearchAddressBinding binding;
     private DestinationSelectionListener listener;
     private SearchViewModel viewModel;
     SharedPreferencesUtility preferences;
@@ -50,7 +51,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentDestinationSearchBinding.inflate(inflater, container, false);
+        binding = FragmentSearchAddressBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         preferences = SharedPreferencesUtility.getInstance(getContext());
         return binding.getRoot();
