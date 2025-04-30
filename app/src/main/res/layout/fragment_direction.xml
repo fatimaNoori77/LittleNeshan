@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layoutDirection="rtl"
-    tools:context=".DirectionFragment">
+    tools:context=".ui.direction.DirectionFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_margin="@dimen/_10sdp"

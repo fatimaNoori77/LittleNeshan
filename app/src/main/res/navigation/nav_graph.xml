@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation"
-        android:name="ir.noori.littleneshan.DirectionFragment"
+        android:name="ir.noori.littleneshan.ui.direction.DirectionFragment"
         android:label="مسیریابی"
         tools:layout="@layout/fragment_direction" />
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <org.neshan.mapsdk.MapView
         android:id="@+id/map"
