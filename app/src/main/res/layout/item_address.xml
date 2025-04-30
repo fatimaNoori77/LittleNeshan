@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?attr/selectableItemBackground">
+    android:layoutDirection="rtl"
+    android:paddingVertical="@dimen/_10sdp">
 
-    <TextView
-        android:id="@+id/txtAddressTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="خانه"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/txtAddressTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            tools:text="خانه" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txtAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        tools:text="کلاهدوز ۶ راهنمایی ۳ پلاک ۵۰"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray" />
+        android:layout_marginStart="@dimen/_25sdp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/_10sdp"
+        tools:text="کلاهدوز ۶ راهنمایی ۳ پلاک ۵۰" />
 
 </LinearLayout>

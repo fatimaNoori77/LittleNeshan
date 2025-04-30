@@ -11,5 +11,8 @@
     <color name="grayDark">#161516</color>
     <color name="page_background">#D0CECE</color>
     <color name="colorBlueBic">#5980d4</color>
+    <color name="icon_color">#3674B5</color>
+    <color name="view_background">#EEF5FF</color>
+<!--    <color name="view_background">#EBF4F6</color>-->
     <color name="colorGreen">#5CB338</color>
 </resources>
