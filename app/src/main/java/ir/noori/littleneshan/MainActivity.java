@@ -18,8 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.carto.styles.MarkerStyle;
 import com.carto.styles.MarkerStyleBuilder;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import org.neshan.common.model.LatLng;
 import org.neshan.mapsdk.MapView;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity
     private LatLng selectedDestination;
     private DirectionViewModel viewModel;
     SharedPreferencesUtility preferences ;
-    FusedLocationProviderClient fusedLocationClient;
+    LocationHelper locationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         preferences = SharedPreferencesUtility.getInstance(getApplicationContext());
+        locationHelper = LocationHelper.getInstance(getApplicationContext());
     }
 
     @Override
@@ -56,6 +55,16 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         initMap();
         initViews();
+
+        checkLocationStatus();
+
+    }
+
+    private void checkLocationStatus() {
+        if (!CheckLocationEnable.isLocationEnabled(getApplicationContext())) {
+            // show dialog is better that Toast
+            Toast.makeText(this, "موقعیت مکانی خو را روشن کنید", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initMap() {
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         moveToCurrentLocation();
 
         binding.cardGPS.setOnClickListener(v -> {
+            checkLocationStatus();
             moveToCurrentLocation();
         });
 
@@ -135,19 +145,13 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, location -> {
-                    if (location != null) {
-                        currentLocation = location;
-                        preferences.saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
-                        map.setMyLocationEnabled(true);
-                        map.moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 0);
-                        map.setZoom(17f, 0);
-                    } else {
-                        Toast.makeText(this, "موقعیت فعلی در دسترس نیست", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        locationHelper.getLastKnownLocation(location -> {
+            currentLocation = location;
+            preferences.saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
+            map.setMyLocationEnabled(true);
+            map.moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 0);
+            map.setZoom(17f, 0);
+        });
     }
 
     @Override

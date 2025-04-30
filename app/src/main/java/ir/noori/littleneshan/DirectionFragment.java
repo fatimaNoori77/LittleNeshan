@@ -2,14 +2,13 @@ package ir.noori.littleneshan;
 
 import static ir.noori.littleneshan.Constants.NESHAN_API_KEY;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,10 +17,14 @@ import com.carto.core.ScreenPos;
 import com.carto.graphics.Color;
 import com.carto.styles.LineStyle;
 import com.carto.styles.LineStyleBuilder;
+import com.carto.styles.MarkerStyle;
+import com.carto.styles.MarkerStyleBuilder;
 
 import org.neshan.common.model.LatLng;
 import org.neshan.common.model.LatLngBounds;
 import org.neshan.mapsdk.MapView;
+import org.neshan.mapsdk.internal.utils.BitmapUtils;
+import org.neshan.mapsdk.model.Marker;
 import org.neshan.mapsdk.model.Polyline;
 
 import java.util.ArrayList;
@@ -35,6 +38,8 @@ public class DirectionFragment extends Fragment {
     private LatLng selectedDestination;
     Polyline overViewPolyline;
     private MapView map;
+    LocationHelper locationHelper;
+
     public DirectionFragment(LatLng selectedDestination) {
         this.selectedDestination = selectedDestination;
     }
@@ -44,23 +49,26 @@ public class DirectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         preferences = SharedPreferencesUtility.getInstance(requireContext());
+        locationHelper = LocationHelper.getInstance(requireContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDirectionBinding.inflate(inflater, container, false);
 
-
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onStart() {
+        super.onStart();
         initMap();
         initViews();
         initObservers();
+        fetchRoutFromApi();
+    }
 
+    private void fetchRoutFromApi() {
         RoutRequestInputs inputs = new RoutRequestInputs(
                 "car",
                 preferences.getLatitude() + "," + preferences.getLongitude(),
@@ -69,7 +77,27 @@ public class DirectionFragment extends Fragment {
         inputs.setAvoidTrafficZone(true);
         inputs.setAlternative(false);
         viewModel.getRoute(inputs, NESHAN_API_KEY);
+    }
 
+    private void startLocationUpdate() {
+        locationHelper.startLocationUpdates(location -> {
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+            map.moveCamera(new LatLng(lat, lng), 0);
+            map.setZoom(17f, 0);
+            map.setBearing(180.0f, 0f);
+            Marker marker = createMarker(new LatLng(lat, lng));
+            map.removeMarker(marker);
+            map.addMarker(marker);
+        });
+    }
+
+    private Marker createMarker(LatLng loc) {
+        MarkerStyleBuilder markStCr = new MarkerStyleBuilder();
+        markStCr.setSize(30f);
+        markStCr.setBitmap(BitmapUtils.createBitmapFromAndroidBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_direction)));
+        MarkerStyle markSt = markStCr.buildStyle();
+        return new Marker(loc, markSt);
     }
 
     private void initObservers() {
@@ -86,6 +114,10 @@ public class DirectionFragment extends Fragment {
         });
 
         viewModel.getStepsLiveData().observe(getViewLifecycleOwner(), steps -> {
+            if(steps == null){
+                Toast.makeText(requireContext(),    "خطا در مسیر یابی، لطفا مقصد را تغییر دهید.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (overViewPolyline != null)
                 map.removePolyline(overViewPolyline);
             for (Step step : steps) {
@@ -96,12 +128,24 @@ public class DirectionFragment extends Fragment {
         });
 
         viewModel.getInstructionLiveData().observe(getViewLifecycleOwner(), instruction -> {
-            Toast.makeText(requireContext(), instruction, Toast.LENGTH_SHORT).show();
+            binding.txtInstructions.setText(instruction);
         });
     }
 
     void initViews(){
+        binding.cardGPS.setOnClickListener(v -> {
 
+        });
+
+        binding.btnEnd.setOnClickListener(v -> {
+            locationHelper.stopLocationUpdates();
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
+
+        binding.btnStart.setOnClickListener(v -> {
+            startLocationUpdate();
+            viewModel.nextStep();
+        });
     }
 
     private void initMap() {
@@ -116,5 +160,10 @@ public class DirectionFragment extends Fragment {
         return lineStCr.buildStyle();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        locationHelper.stopLocationUpdates();
 
+    }
 }

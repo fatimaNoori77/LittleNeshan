@@ -31,18 +31,26 @@ public class DirectionViewModel extends ViewModel {
 
     public void getRoute(RoutRequestInputs inputs, String apiKey) {
         repository.getRoute(inputs, apiKey).observeForever(response->{
-            if (response != null) {
-                routResult.setValue(response);
-                List<Step> steps = response.getRoutes().get(0).getLegs().get(0).getSteps();
-                this.currentSteps = steps;
-                stepsLiveData.setValue(steps);
+            try {
+                if (response != null) {
+                    if(response.getRoutes() == null){
+                        stepsLiveData.setValue(null);
+                        return;
+                    }
+                    routResult.setValue(response);
+                    List<Step> steps = response.getRoutes().get(0).getLegs().get(0).getSteps();
+                    this.currentSteps = steps;
+                    stepsLiveData.setValue(steps);
 
-                if (!steps.isEmpty()) {
-                    currentStepIndex = 0;
-                    instructionLiveData.setValue(steps.get(0).getInstruction());
+                    if (!steps.isEmpty()) {
+                        currentStepIndex = 0;
+                        instructionLiveData.setValue(steps.get(0).getInstruction());
+                    }
+                } else {
+                    routResult.setValue(null);
                 }
-            } else {
-                routResult.setValue(null);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
     }

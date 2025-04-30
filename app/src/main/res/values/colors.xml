@@ -10,4 +10,6 @@
     <color name="grayTransparent">#B5656265</color>
     <color name="grayDark">#161516</color>
     <color name="page_background">#D0CECE</color>
+    <color name="colorBlueBic">#5980d4</color>
+    <color name="colorGreen">#5CB338</color>
 </resources>
