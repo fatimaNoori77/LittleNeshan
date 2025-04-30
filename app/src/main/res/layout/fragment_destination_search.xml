@@ -43,6 +43,7 @@
         android:layout_height="wrap_content">
 
     <com.google.android.material.chip.Chip
+        android:id="@+id/chipHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/CustomChipTextAppearance"
@@ -53,7 +54,7 @@
         android:text="@string/home"/>
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/chipSave"
+        android:id="@+id/chipWork"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:chipIcon="@drawable/ic_briefcase"

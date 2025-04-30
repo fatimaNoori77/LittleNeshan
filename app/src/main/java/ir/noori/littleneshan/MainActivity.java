@@ -16,24 +16,15 @@ import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.carto.core.ScreenBounds;
-import com.carto.core.ScreenPos;
-import com.carto.graphics.Color;
-import com.carto.styles.LineStyle;
-import com.carto.styles.LineStyleBuilder;
 import com.carto.styles.MarkerStyle;
 import com.carto.styles.MarkerStyleBuilder;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
 import org.neshan.common.model.LatLng;
-import org.neshan.common.model.LatLngBounds;
 import org.neshan.mapsdk.MapView;
 import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
-import org.neshan.mapsdk.model.Polyline;
-
-import java.util.ArrayList;
 
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 
@@ -46,7 +37,6 @@ public class MainActivity extends AppCompatActivity
     private DirectionViewModel viewModel;
     SharedPreferencesUtility preferences ;
     FusedLocationProviderClient fusedLocationClient;
-    Polyline overViewPolyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,37 +54,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
         initMap();
         initViews();
-        initObservers();
-    }
-
-    private void initObservers() {
-        viewModel.getRoutResult().observe(this, result -> {
-            map.moveToCameraBounds(
-                    new LatLngBounds(
-                            new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                            new LatLng(selectedDestination.getLatitude(), selectedDestination.getLongitude())),
-                    new ScreenBounds(new ScreenPos(0, 0),
-                            new ScreenPos(map.getWidth(), map.getHeight())
-                    ),
-                    true, 0.25f);
-            map.setTilt(60.0f, 0f);
-        });
-
-        viewModel.getStepsLiveData().observe(this, steps -> {
-            map.removePolyline(overViewPolyline);
-            for (Step step : steps) {
-                ArrayList<LatLng> path = new PolylineDecoder().decodePoly(step.getPolyline());
-                overViewPolyline = new Polyline(path, getLineStyle());
-                map.addPolyline(overViewPolyline);
-            }
-        });
-
-        viewModel.getInstructionLiveData().observe(this, instruction -> {
-            Toast.makeText(getApplicationContext(), instruction, Toast.LENGTH_SHORT).show();
-        });
     }
 
     private void initMap() {
@@ -113,9 +74,6 @@ public class MainActivity extends AppCompatActivity
             binding.llMoreOptions.setVisibility(View.GONE);
             binding.cardClose.setVisibility(View.GONE);
             binding.edtDestination.getText().clear();
-            if(overViewPolyline != null){
-                map.removePolyline(overViewPolyline);
-            }
         });
 
         binding.edtDestination.setOnFocusChangeListener((v, hasFocus) -> {
@@ -125,14 +83,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         binding.chipDriving.setOnClickListener(v -> {
-            RoutRequestInputs inputs = new RoutRequestInputs(
-                    "car",
-                    currentLocation.getLatitude() + "," + currentLocation.getLongitude(),
-                    selectedDestination.getLatitude() + "," + selectedDestination.getLongitude()
-            );
-            inputs.setAvoidTrafficZone(true);
-            inputs.setAlternative(false);
-            viewModel.getRoute(inputs, "service.e1818ace4a9a49a89328232697bbd9e8");
+            showDirectionFragment();
         });
 
         binding.chipSave.setOnClickListener(v -> {
@@ -162,28 +113,20 @@ public class MainActivity extends AppCompatActivity
         binding.cardClose.setVisibility(View.VISIBLE);
     }
 
+    public void showDirectionFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DirectionFragment(selectedDestination))
+                .addToBackStack(null)
+                .commit();
+    }
+
     private Marker createMarker(LatLng loc) {
         MarkerStyleBuilder markStCr = new MarkerStyleBuilder();
         markStCr.setSize(30f);
         markStCr.setBitmap(BitmapUtils.createBitmapFromAndroidBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_pin)));
         MarkerStyle markSt = markStCr.buildStyle();
         return new Marker(loc, markSt);
-    }
-
-    public void drawLine(String polyline) {
-        PolylineDecoder decode= new PolylineDecoder();
-        ArrayList<LatLng> latLngs = decode.decodePoly(polyline);
-        overViewPolyline = new Polyline(latLngs, getLineStyle());
-        map.addPolyline(overViewPolyline);
-        map.moveCamera(new LatLng(latLngs.get(0).getLatitude(), latLngs.get(0).getLongitude()), 0.25f);
-    }
-
-    private LineStyle getLineStyle() {
-        LineStyleBuilder lineStCr = new LineStyleBuilder();
-        lineStCr.setColor(new Color((short) 2, (short) 119, (short) 189, (short) 190));
-        lineStCr.setWidth(6f);
-        lineStCr.setStretchFactor(100f);
-        return lineStCr.buildStyle();
     }
 
     private void moveToCurrentLocation() {

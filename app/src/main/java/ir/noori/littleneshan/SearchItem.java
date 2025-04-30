@@ -10,6 +10,21 @@ public class SearchItem {
     private String category;
     private LocationModel location;
 
+    public SearchItem (){
+
+    }
+    public SearchItem(String title, String address, String neighbourhood, String region,
+                      String type, String category, LocationModel location) {
+        this.title = title;
+        this.address = address;
+        this.neighbourhood = neighbourhood;
+        this.region = region;
+        this.type = type;
+        this.category = category;
+        this.location = location;
+    }
+
+
     public String getTitle() { return title; }
     public String getAddress() { return address; }
     public String getNeighbourhood() { return neighbourhood; }

@@ -6,4 +6,6 @@
     <string name="hint_destination">مقصدت کجاست؟</string>
     <string name="work">محل کار</string>
     <string name="home">خانه</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

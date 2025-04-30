@@ -1,5 +1,7 @@
 package ir.noori.littleneshan;
 
+import static ir.noori.littleneshan.Constants.NESHAN_API_KEY;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +95,38 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
         binding.imgClose.setOnClickListener(v -> {
             dismiss();
         });
+        binding.chipHome.setOnClickListener(v -> {
+            LocationModel location = new LocationModel(36.29799544485502,59.606050921164695);
+
+            SearchItem item = new SearchItem(
+                    "میدان شهدا",
+                    "میدان شهدا",
+                    "محله شهدا",
+                    "مشهد، خراسان رضوی",
+                    "religious",
+                    "place",
+                    location
+            );
+
+            listener.onDestinationSelected(item);
+            dismiss();
+        });
+        binding.chipWork.setOnClickListener(v -> {
+            LocationModel location = new LocationModel(36.319510912113614,59.544793812562546);
+
+            SearchItem item = new SearchItem(
+                    "شتابندهنده هاوش",
+                    "سجاد ۲۱ نبش امین ۲",
+                    "سجاد",
+                    "مشهد، خراسان رضوی",
+                    "religious",
+                    "place",
+                    location
+            );
+
+            listener.onDestinationSelected(item);
+            dismiss();
+        });
     }
 
     private void initObservers() {
@@ -119,7 +153,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
     private void performSearch() {
         String query = binding.edtDestination.getText().toString().trim();
         if (!query.isEmpty()) {
-            viewModel.searchAddress("service.e1818ace4a9a49a89328232697bbd9e8", query, preferences.getLatitude(), preferences.getLongitude());
+            viewModel.searchAddress(NESHAN_API_KEY, query, preferences.getLatitude(), preferences.getLongitude());
         }
     }
 

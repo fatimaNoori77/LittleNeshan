@@ -1,7 +1,5 @@
 package ir.noori.littleneshan;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,8 +28,8 @@ public class DirectionRepository {
                 apiKey).enqueue(new Callback<RouteResponse>() {
             @Override
             public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+                // handle this = {"status":"ERROR","code":200,"message":"No Route Found!"}
                 if (response.isSuccessful()) {
-                    Log.i("TAG", "getRoute000000: "+ response.isSuccessful());
                     route.setValue(response.body());
                 } else {
                     route.setValue(null);
