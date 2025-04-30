@@ -24,7 +24,7 @@
                 android:id="@+id/txtInstructions"
                 android:textSize="@dimen/_12sdp"
                 android:padding="@dimen/_10sdp"
-                tools:text="بعد از ۵۰۰ متر به راست برانید"
+                android:text="برای شروع، روی دکمه شروع سفر کلیک کنید"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
@@ -32,7 +32,8 @@
 
             <ImageView
                 android:id="@+id/imgDirection"
-                android:src="@drawable/direction_right"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:padding="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -75,6 +76,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ViewFlipper
+            android:id="@+id/viewFlipper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -86,6 +88,7 @@
                 android:textSize="@dimen/_14sdp"
                 android:paddingHorizontal="@dimen/_50sdp"
                 android:text="@string/start_trip"
+                android:textStyle="bold"
                 style="@style/Widget.MaterialComponents.Button.TextButton" />
 
             <com.google.android.material.button.MaterialButton
@@ -95,6 +98,7 @@
                 android:textColor="@color/colorBlueBic"
                 android:textSize="@dimen/_14sdp"
                 android:paddingHorizontal="@dimen/_50sdp"
+                android:textStyle="bold"
                 android:text="@string/end_trip"
                 style="@style/Widget.MaterialComponents.Button.TextButton" />
 

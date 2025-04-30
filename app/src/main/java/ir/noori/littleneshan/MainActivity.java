@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity
         binding.edtDestination.setText(destination.getAddress());
         selectedDestination = new LatLng(destination.getLocation().getY(), destination.getLocation().getX());
         map.moveCamera(selectedDestination, 0);
-        map.addMarker(createMarker(selectedDestination));
+        Marker marker = createMarker(selectedDestination);
+        map.clearMarkers();
+        map.addMarker(marker);
         map.setZoom(17f, 0f);
         binding.llMoreOptions.setVisibility(View.VISIBLE);
         binding.cardClose.setVisibility(View.VISIBLE);

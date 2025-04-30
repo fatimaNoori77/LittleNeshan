@@ -13,7 +13,7 @@ public class DirectionViewModel extends ViewModel {
         this.repository = new DirectionRepository();
     }
     private final MutableLiveData<List<Step>> stepsLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> instructionLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Step> instructionLiveData = new MutableLiveData<>();
     private List<Step> currentSteps;
     private int currentStepIndex = 0;
 
@@ -21,7 +21,7 @@ public class DirectionViewModel extends ViewModel {
         return stepsLiveData;
     }
 
-    public LiveData<String> getInstructionLiveData() {
+    public LiveData<Step> getInstructionLiveData() {
         return instructionLiveData;
     }
     private  MutableLiveData<RouteResponse> routResult = new MutableLiveData<>();
@@ -44,7 +44,7 @@ public class DirectionViewModel extends ViewModel {
 
                     if (!steps.isEmpty()) {
                         currentStepIndex = 0;
-                        instructionLiveData.setValue(steps.get(0).getInstruction());
+                        instructionLiveData.setValue(steps.get(0));
                     }
                 } else {
                     routResult.setValue(null);
@@ -58,7 +58,7 @@ public class DirectionViewModel extends ViewModel {
     public void nextStep() {
         if (currentSteps != null && currentStepIndex < currentSteps.size() - 1) {
             currentStepIndex++;
-            instructionLiveData.setValue(currentSteps.get(currentStepIndex).getInstruction());
+            instructionLiveData.setValue(currentSteps.get(currentStepIndex));
         }
     }
 

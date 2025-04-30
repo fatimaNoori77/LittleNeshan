@@ -96,7 +96,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
             dismiss();
         });
         binding.chipHome.setOnClickListener(v -> {
-            LocationModel location = new LocationModel(36.29799544485502,59.606050921164695);
+            LocationModel location = new LocationModel(59.606050921164695, 36.29799544485502);
 
             SearchItem item = new SearchItem(
                     "میدان شهدا",
@@ -112,7 +112,7 @@ public class DestinationSearchBottomSheet extends BottomSheetDialogFragment {
             dismiss();
         });
         binding.chipWork.setOnClickListener(v -> {
-            LocationModel location = new LocationModel(36.319510912113614,59.544793812562546);
+            LocationModel location = new LocationModel(59.544793812562546, 36.319510912113614);
 
             SearchItem item = new SearchItem(
                     "شتابندهنده هاوش",

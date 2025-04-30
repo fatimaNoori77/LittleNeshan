@@ -87,7 +87,7 @@ public class DirectionFragment extends Fragment {
             map.setZoom(17f, 0);
             map.setBearing(180.0f, 0f);
             Marker marker = createMarker(new LatLng(lat, lng));
-            map.removeMarker(marker);
+            map.clearMarkers();
             map.addMarker(marker);
         });
     }
@@ -127,8 +127,16 @@ public class DirectionFragment extends Fragment {
             }
         });
 
-        viewModel.getInstructionLiveData().observe(getViewLifecycleOwner(), instruction -> {
-            binding.txtInstructions.setText(instruction);
+        viewModel.getInstructionLiveData().observe(getViewLifecycleOwner(), step -> {
+            binding.txtInstructions.setText(step.getInstruction());
+            // just for example
+            if(step.getModifier().contains("right")){
+                binding.imgDirection.setImageResource(R.drawable.direction_right);
+            }else if(step.getModifier().contains("left")){
+                binding.imgDirection.setImageResource(R.drawable.direction_left);
+            }else{
+                binding.imgDirection.setImageResource(R.drawable.direction_direct);
+            }
         });
     }
 
@@ -145,6 +153,7 @@ public class DirectionFragment extends Fragment {
         binding.btnStart.setOnClickListener(v -> {
             startLocationUpdate();
             viewModel.nextStep();
+            binding.viewFlipper.setDisplayedChild(1);
         });
     }
 
@@ -165,5 +174,12 @@ public class DirectionFragment extends Fragment {
         super.onDestroy();
         locationHelper.stopLocationUpdates();
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // when the user press home button or lock the phone
+        locationHelper.stopLocationUpdates();
     }
 }
