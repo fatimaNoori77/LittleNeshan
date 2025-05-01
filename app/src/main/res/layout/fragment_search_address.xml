@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="سید رضی ۴۹ بعد از چهارراه اول"
+            android:text="@string/seyyed_razi"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="چهارراه دکتری کافه نون"
+            android:text="@string/doctors"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
@@ -140,7 +140,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="موردی یافت نشد! :("
+            android:text="@string/not_found"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 

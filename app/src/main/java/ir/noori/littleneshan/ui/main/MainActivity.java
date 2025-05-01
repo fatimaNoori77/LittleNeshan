@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     private void checkLocationStatus() {
         if (!CheckLocationEnable.isLocationEnabled(getApplicationContext())) {
             // show dialog is better that Toast
-            Toast.makeText(this, "موقعیت مکانی خو را روشن کنید", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.turn_on_gps, Toast.LENGTH_LONG).show();
         }
     }
 

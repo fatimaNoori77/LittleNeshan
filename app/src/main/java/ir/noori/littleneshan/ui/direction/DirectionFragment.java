@@ -120,7 +120,7 @@ public class DirectionFragment extends Fragment {
 
         viewModel.getStepsLiveData().observe(getViewLifecycleOwner(), steps -> {
             if(steps == null){
-                Toast.makeText(requireContext(),    "خطا در مسیر یابی، لطفا مقصد را تغییر دهید.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.routing_error, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (overViewPolyline != null)

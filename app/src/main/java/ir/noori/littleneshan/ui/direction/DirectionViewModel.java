@@ -31,7 +31,7 @@ public class DirectionViewModel extends ViewModel {
     public LiveData<Step> getInstructionLiveData() {
         return instructionLiveData;
     }
-    private  MutableLiveData<RouteResponse> routResult = new MutableLiveData<>();
+    private final MutableLiveData<RouteResponse> routResult = new MutableLiveData<>();
     public LiveData<RouteResponse> getRoutResult() {
         return routResult;
     }

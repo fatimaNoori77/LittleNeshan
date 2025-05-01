@@ -3,6 +3,7 @@ package ir.noori.littleneshan.utils;
 import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -58,7 +59,7 @@ public class LocationHelper {
                     locationCallback,
                     Looper.getMainLooper());
         } catch (SecurityException e) {
-            e.printStackTrace();
+            Log.e("TAG", "startLocationUpdates: " + e.getMessage());
         }
     }
 
@@ -78,7 +79,7 @@ public class LocationHelper {
                         }
                     });
         } catch (SecurityException e) {
-            e.printStackTrace();
+            Log.e("TAG", "getLastKnownLocation: " + e.getMessage());
         }
     }
 }

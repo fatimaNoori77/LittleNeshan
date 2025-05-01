@@ -1,5 +1,7 @@
 package ir.noori.littleneshan.utils;
 
+import static ir.noori.littleneshan.utils.Constants.SEARCH_DELAY;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -10,7 +12,6 @@ public class SearchTextWatcher implements TextWatcher {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
-    private static final long DELAY_MILLIS = 1000; // 1 seconds delay
     private final SearchCallback callback;
 
     public interface SearchCallback {
@@ -42,7 +43,7 @@ public class SearchTextWatcher implements TextWatcher {
             }
         };
 
-        handler.postDelayed(searchRunnable, DELAY_MILLIS);
+        handler.postDelayed(searchRunnable, SEARCH_DELAY);
     }
 
     public static void attachTo(EditText editText, SearchCallback callback) {

@@ -11,8 +11,8 @@ import ir.noori.littleneshan.databinding.ItemAddressBinding;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.DestinationViewHolder> {
 
-    private List<SearchItem> destinations;
-    private OnDestinationClickListener listener;
+    private final List<SearchItem> destinations;
+    private final OnDestinationClickListener listener;
 
     public interface OnDestinationClickListener {
         void onDestinationClick(SearchItem destination);

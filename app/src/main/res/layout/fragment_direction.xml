@@ -24,9 +24,9 @@
                 android:id="@+id/txtInstructions"
                 android:textSize="@dimen/_12sdp"
                 android:padding="@dimen/_10sdp"
-                android:text="برای شروع، روی دکمه شروع سفر کلیک کنید"
+                android:text="@string/press_start_trip"
                 android:textColor="@color/white"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
 
