@@ -70,6 +70,7 @@
 
 <!--    you should save recent addresses in room data base-->
     <LinearLayout
+        android:id="@+id/llAddressHistory1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="@dimen/_10sdp"
@@ -91,6 +92,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llAddressHistory2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -105,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:text="چهارراه دکتری دانشگاه ۳۴"
+            android:text="چهارراه دکتری کافه نون"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 

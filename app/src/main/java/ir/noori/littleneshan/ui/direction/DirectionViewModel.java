@@ -1,5 +1,7 @@
 package ir.noori.littleneshan.ui.direction;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -34,8 +36,8 @@ public class DirectionViewModel extends ViewModel {
         return routResult;
     }
 
-    public void getRoute(RoutRequestInputs inputs, String apiKey) {
-        repository.getRoute(inputs, apiKey).observeForever(response->{
+    public void getRoute(RoutRequestInputs inputs) {
+        repository.getRoute(inputs).observeForever(response->{
             try {
                 if (response != null) {
                     if(response.getRoutes() == null){
@@ -55,7 +57,7 @@ public class DirectionViewModel extends ViewModel {
                     routResult.setValue(null);
                 }
             }catch (Exception e){
-                e.printStackTrace();
+                Log.e("TAG", "getRoute: "+ e.getMessage());
             }
         });
     }

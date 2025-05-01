@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.carto.styles.MarkerStyle;
 import com.carto.styles.MarkerStyleBuilder;
@@ -26,15 +25,14 @@ import org.neshan.mapsdk.MapView;
 import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
 
-import ir.noori.littleneshan.utils.Constants;
 import ir.noori.littleneshan.R;
 import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 import ir.noori.littleneshan.ui.direction.DirectionFragment;
-import ir.noori.littleneshan.ui.direction.DirectionViewModel;
 import ir.noori.littleneshan.ui.search.SearchAddressFragment;
 import ir.noori.littleneshan.utils.CheckLocationEnable;
+import ir.noori.littleneshan.utils.Constants;
 import ir.noori.littleneshan.utils.LocationHelper;
 
 public class MainActivity extends AppCompatActivity
@@ -43,8 +41,7 @@ public class MainActivity extends AppCompatActivity
     private MapView map;
     private Location currentLocation;
     private LatLng selectedDestination;
-    private DirectionViewModel viewModel;
-    SharedPreferencesUtility preferences ;
+    SharedPreferencesUtility preferences;
     LocationHelper locationHelper;
 
     @Override
@@ -56,7 +53,6 @@ public class MainActivity extends AppCompatActivity
         getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         setContentView(binding.getRoot());
-        viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
         preferences = SharedPreferencesUtility.getInstance(getApplicationContext());
         locationHelper = LocationHelper.getInstance(getApplicationContext());
     }
@@ -103,17 +99,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        binding.chipDriving.setOnClickListener(v -> {
-            showDirectionFragment();
-        });
+        binding.chipDriving.setOnClickListener(v -> showDirectionFragment());
 
-        binding.chipSave.setOnClickListener(v -> {
-            Toast.makeText(this, "مثلا آدرس در حافظه کپی شد ;)", Toast.LENGTH_SHORT).show();
-        });
+        binding.chipSave.setOnClickListener(v -> Toast.makeText(this,R.string.copy_address, Toast.LENGTH_SHORT).show());
 
-        binding.chipShare.setOnClickListener(v -> {
-            Toast.makeText(this, "مثلا آدرس ارسال شد ;)", Toast.LENGTH_SHORT).show();
-        });
+        binding.chipShare.setOnClickListener(v -> Toast.makeText(this, R.string.share_address, Toast.LENGTH_SHORT).show());
     }
 
     private void showDestinationSearchBottomSheet() {
@@ -126,7 +116,6 @@ public class MainActivity extends AppCompatActivity
             bottomSheet.setDestinationSelectionListener(this);
             bottomSheet.show(fragmentManager, TAG);
         }
-
     }
 
     @Override
@@ -148,6 +137,7 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, new DirectionFragment(selectedDestination))
                 .addToBackStack(null)
                 .commit();
+        map.clearMarkers();
     }
 
     private Marker createMarker(LatLng loc) {

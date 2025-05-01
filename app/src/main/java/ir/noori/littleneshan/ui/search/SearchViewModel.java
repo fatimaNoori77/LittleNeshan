@@ -24,9 +24,9 @@ public class SearchViewModel extends ViewModel {
         return isLoading;
     }
 
-    public void searchAddress(String apiKey, String term, double lat, double lng) {
+    public void searchAddress(String term, double lat, double lng) {
         isLoading.setValue(true);
-        repository.searchAddress(apiKey, term, lat, lng).observeForever(response -> {
+        repository.searchAddress(term, lat, lng).observeForever(response -> {
             isLoading.setValue(false);
             if (response != null) {
                 searchResult.setValue(response);

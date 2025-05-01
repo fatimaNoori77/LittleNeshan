@@ -1,7 +1,5 @@
 package ir.noori.littleneshan.ui.search;
 
-import static ir.noori.littleneshan.utils.Constants.NESHAN_API_KEY;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +26,7 @@ import ir.noori.littleneshan.databinding.FragmentSearchAddressBinding;
 
 public class SearchAddressFragment extends BottomSheetDialogFragment {
     public static final String TAG = SearchAddressFragment.class.getSimpleName();
-    private AddressAdapter adapter;
-    private List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
+    private final List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
     private FragmentSearchAddressBinding binding;
     private DestinationSelectionListener listener;
     private SearchViewModel viewModel;
@@ -95,10 +92,38 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
             performSearch();
             return true;
         });
-        SearchTextWatcher.attachTo(binding.edtDestination, query -> {
-            performSearch();
+        SearchTextWatcher.attachTo(binding.edtDestination, query -> performSearch());
+        binding.imgClose.setOnClickListener(v -> dismiss());
+        binding.llAddressHistory1.setOnClickListener(v -> {
+            LocationModel location = new LocationModel(59.52349621640934, 36.338916305311685);
+
+            SearchItem item = new SearchItem(
+                    "سید رضی ۴۹",
+                    "سید رضی ۴۹",
+                    "سید رضی",
+                    "مشهد، خراسان رضوی",
+                    "religious",
+                    "place",
+                    location
+            );
+
+            listener.onDestinationSelected(item);
+            dismiss();
         });
-        binding.imgClose.setOnClickListener(v -> {
+        binding.llAddressHistory2.setOnClickListener(v -> {
+            LocationModel location = new LocationModel(59.59000039034257,36.29270215464582);
+
+            SearchItem item = new SearchItem(
+                    "چهارراه دکتری",
+                    "چهارراه دکتری کافه نون",
+                    "دانشگاه",
+                    "مشهد، خراسان رضوی",
+                    "religious",
+                    "place",
+                    location
+            );
+
+            listener.onDestinationSelected(item);
             dismiss();
         });
         binding.chipHome.setOnClickListener(v -> {
@@ -146,7 +171,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     }
 
     private void setAdapter() {
-        adapter = new AddressAdapter(addresses, destination -> {
+        AddressAdapter adapter = new AddressAdapter(addresses, destination -> {
             if (listener != null) {
                 listener.onDestinationSelected(destination);
             }
@@ -159,13 +184,13 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     private void performSearch() {
         String query = binding.edtDestination.getText().toString().trim();
         if (!query.isEmpty()) {
-            viewModel.searchAddress(NESHAN_API_KEY, query, preferences.getLatitude(), preferences.getLongitude());
+            viewModel.searchAddress(query, preferences.getLatitude(), preferences.getLongitude());
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Clean up binding reference
+        binding = null;
     }
 }

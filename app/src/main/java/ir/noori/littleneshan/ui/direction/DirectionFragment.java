@@ -1,7 +1,5 @@
 package ir.noori.littleneshan.ui.direction;
 
-import static ir.noori.littleneshan.utils.Constants.NESHAN_API_KEY;
-
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,19 +28,19 @@ import org.neshan.mapsdk.model.Polyline;
 
 import java.util.ArrayList;
 
-import ir.noori.littleneshan.utils.LocationHelper;
-import ir.noori.littleneshan.utils.PolylineDecoder;
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
+import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.Step;
 import ir.noori.littleneshan.databinding.FragmentDirectionBinding;
+import ir.noori.littleneshan.utils.LocationHelper;
+import ir.noori.littleneshan.utils.PolylineDecoder;
 
 public class DirectionFragment extends Fragment {
     private FragmentDirectionBinding binding;
     private DirectionViewModel viewModel;
     SharedPreferencesUtility preferences ;
-    private LatLng selectedDestination;
+    private final LatLng selectedDestination;
     Polyline overViewPolyline;
     private MapView map;
     LocationHelper locationHelper;
@@ -59,7 +58,7 @@ public class DirectionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDirectionBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
@@ -82,7 +81,7 @@ public class DirectionFragment extends Fragment {
         );
         inputs.setAvoidTrafficZone(true);
         inputs.setAlternative(false);
-        viewModel.getRoute(inputs, NESHAN_API_KEY);
+        viewModel.getRoute(inputs);
     }
 
     private void startLocationUpdate() {
@@ -169,7 +168,8 @@ public class DirectionFragment extends Fragment {
 
     private LineStyle getLineStyle() {
         LineStyleBuilder lineStCr = new LineStyleBuilder();
-        lineStCr.setColor(new Color((short) 2, (short) 119, (short) 189, (short) 190));
+        Color blue = new Color((short) 2, (short) 119, (short) 189, (short) 190);
+        lineStCr.setColor(blue);
         lineStCr.setWidth(6f);
         lineStCr.setStretchFactor(100f);
         return lineStCr.buildStyle();
