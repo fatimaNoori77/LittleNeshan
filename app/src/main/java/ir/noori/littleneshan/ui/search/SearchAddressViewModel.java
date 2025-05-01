@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel;
 import ir.noori.littleneshan.data.model.SearchResponse;
 import ir.noori.littleneshan.data.repository.SearchRepository;
 
-public class SearchViewModel extends ViewModel {
+public class SearchAddressViewModel extends ViewModel {
     private final SearchRepository repository;
     private final MutableLiveData<SearchResponse> searchResult = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
-    public SearchViewModel() {
+    public SearchAddressViewModel() {
         this.repository = new SearchRepository();
     }
 

@@ -29,7 +29,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     private final List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
     private FragmentSearchAddressBinding binding;
     private DestinationSelectionListener listener;
-    private SearchViewModel viewModel;
+    private SearchAddressViewModel viewModel;
     SharedPreferencesUtility preferences;
 
 
@@ -54,7 +54,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSearchAddressBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SearchAddressViewModel.class);
         preferences = SharedPreferencesUtility.getInstance(getContext());
         return binding.getRoot();
     }
@@ -161,7 +161,15 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     }
 
     private void initObservers() {
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), loader->{
+            if (loader) {
+                binding.viewFlipper.setDisplayedChild(0);
+            } else {
+                binding.viewFlipper.setDisplayedChild(1);
+            }
+        });
         viewModel.getSearchResult().observe(getViewLifecycleOwner(), result -> {
+            binding.edtDestination.clearFocus();
             if (result != null) {
                 addresses.clear();
                 addresses.addAll(result.getItems());
