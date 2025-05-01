@@ -22,6 +22,9 @@ playServicesLocation = "21.3.0"
 playServicesLocationVersion = "21.0.1"
 playServicesMaps = "19.2.0"
 retrofit = "2.9.0"
+roomCompiler = "2.6.1"
+roomCompilerVersion = "2.7.1"
+roomRuntimeVersion = "2.7.1"
 sdpAndroid = "1.1.0"
 servicesSdk = "1.0.0"
 navigationFragment = "2.8.9"
@@ -29,6 +32,8 @@ navigationUi = "2.8.9"
 navigation = "2.8.9"
 
 [libraries]
+androidx-room-compiler-v271 = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+androidx-room-runtime-v271 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 common-sdk = { module = "neshan-android-sdk:common-sdk", version.ref = "commonSdk" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -52,6 +57,7 @@ play-services-gcm = { module = "com.google.android.gms:play-services-gcm", versi
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 services-sdk = { module = "neshan-android-sdk:services-sdk", version.ref = "servicesSdk" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }

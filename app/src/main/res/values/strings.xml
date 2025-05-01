@@ -18,4 +18,5 @@
     <string name="seyyed_razi">سید رضی ۴۹ بعد از چهارراه اول</string>
     <string name="doctors">چهارراه دکتری کافه نون</string>
     <string name="not_found">موردی یافت نشد! :(</string>
+    <string name="internet_warning">اتصال اینترنت برقرار نیست</string>
 </resources>

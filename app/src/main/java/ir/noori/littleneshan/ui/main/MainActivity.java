@@ -31,6 +31,7 @@ import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 import ir.noori.littleneshan.ui.direction.DirectionFragment;
 import ir.noori.littleneshan.ui.search.SearchAddressFragment;
+import ir.noori.littleneshan.utils.CheckInternetStatus;
 import ir.noori.littleneshan.utils.CheckLocationEnable;
 import ir.noori.littleneshan.utils.Constants;
 import ir.noori.littleneshan.utils.LocationHelper;
@@ -62,9 +63,14 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         initMap();
         initViews();
-
         checkLocationStatus();
+        checkInternetStatus();
+    }
 
+    private void checkInternetStatus() {
+        if (!CheckInternetStatus.isInternetAvailable(getApplicationContext())) {
+            Toast.makeText(this, R.string.internet_warning, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void checkLocationStatus() {

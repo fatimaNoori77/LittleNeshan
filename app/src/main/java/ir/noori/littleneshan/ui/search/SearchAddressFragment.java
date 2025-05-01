@@ -18,14 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.model.SearchItem;
-import ir.noori.littleneshan.utils.SearchTextWatcher;
 import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
+import ir.noori.littleneshan.data.local.entity.AddressEntity;
+import ir.noori.littleneshan.data.local.entity.mapper.Mapper;
 import ir.noori.littleneshan.data.model.LocationModel;
+import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.FragmentSearchAddressBinding;
+import ir.noori.littleneshan.utils.SearchTextWatcher;
 
 public class SearchAddressFragment extends BottomSheetDialogFragment {
     public static final String TAG = SearchAddressFragment.class.getSimpleName();
+    AddressAdapter adapter;
     private final List<SearchItem> addresses = new ArrayList<>(); // Initialize with empty list
     private FragmentSearchAddressBinding binding;
     private DestinationSelectionListener listener;
@@ -84,6 +87,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
         initObservers();
+        initAddressAdapter();
     }
 
     private void setupViews() {
@@ -94,38 +98,6 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
         });
         SearchTextWatcher.attachTo(binding.edtDestination, query -> performSearch());
         binding.imgClose.setOnClickListener(v -> dismiss());
-        binding.llAddressHistory1.setOnClickListener(v -> {
-            LocationModel location = new LocationModel(59.52349621640934, 36.338916305311685);
-
-            SearchItem item = new SearchItem(
-                    "سید رضی ۴۹",
-                    "سید رضی ۴۹",
-                    "سید رضی",
-                    "مشهد، خراسان رضوی",
-                    "religious",
-                    "place",
-                    location
-            );
-
-            listener.onDestinationSelected(item);
-            dismiss();
-        });
-        binding.llAddressHistory2.setOnClickListener(v -> {
-            LocationModel location = new LocationModel(59.59000039034257,36.29270215464582);
-
-            SearchItem item = new SearchItem(
-                    "چهارراه دکتری",
-                    "چهارراه دکتری کافه نون",
-                    "دانشگاه",
-                    "مشهد، خراسان رضوی",
-                    "religious",
-                    "place",
-                    location
-            );
-
-            listener.onDestinationSelected(item);
-            dismiss();
-        });
         binding.chipHome.setOnClickListener(v -> {
             LocationModel location = new LocationModel(59.606050921164695, 36.29799544485502);
 
@@ -161,6 +133,16 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     }
 
     private void initObservers() {
+        viewModel.getAllAddressesFromDatabase().observe(getViewLifecycleOwner(), addresses -> {
+            if (binding.edtDestination.getText().toString().isEmpty()) {
+                List<SearchItem> searchItems = new ArrayList<>();
+                for (AddressEntity entity : addresses) {
+                    searchItems.add(Mapper.mapToSearchItem(entity));
+                }
+                adapter.submitList(searchItems);
+            }
+        });
+
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), loader->{
             if (loader) {
                 binding.viewFlipper.setDisplayedChild(0);
@@ -173,20 +155,21 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
             if (result != null) {
                 addresses.clear();
                 addresses.addAll(result.getItems());
-                setAdapter();
+                adapter.submitList(addresses);
             }
         });
     }
 
-    private void setAdapter() {
-        AddressAdapter adapter = new AddressAdapter(addresses, destination -> {
+    private void initAddressAdapter() {
+        adapter = new AddressAdapter(destination -> {
             if (listener != null) {
+                viewModel.insertAddress(Mapper.mapToAddressEntity(destination));
                 listener.onDestinationSelected(destination);
             }
             dismiss();
         });
         binding.destinationsRecyclerView.setAdapter(adapter);
-
+        adapter.submitList(addresses);
     }
 
     private void performSearch() {

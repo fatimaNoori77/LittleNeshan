@@ -1,5 +1,4 @@
 package ir.noori.littleneshan.data.model;
-// SearchItem.java
 
 public class SearchItem {
     private String title;
@@ -32,4 +31,32 @@ public class SearchItem {
     public String getType() { return type; }
     public String getCategory() { return category; }
     public LocationModel getLocation() { return location; }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setNeighbourhood(String neighbourhood) {
+        this.neighbourhood = neighbourhood;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setLocation(LocationModel location) {
+        this.location = location;
+    }
 }

@@ -87,4 +87,8 @@ dependencies {
 
     implementation libs.lottie
 
+    // Room
+    implementation libs.androidx.room.runtime.v271
+    annotationProcessor libs.androidx.room.compiler.v271
+
 }

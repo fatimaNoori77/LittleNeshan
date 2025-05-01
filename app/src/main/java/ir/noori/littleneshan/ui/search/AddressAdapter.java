@@ -2,26 +2,40 @@ package ir.noori.littleneshan.ui.search;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
 
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ItemAddressBinding;
+public class AddressAdapter extends ListAdapter<SearchItem, AddressAdapter.DestinationViewHolder> {
 
-public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.DestinationViewHolder> {
-
-    private final List<SearchItem> destinations;
     private final OnDestinationClickListener listener;
 
     public interface OnDestinationClickListener {
         void onDestinationClick(SearchItem destination);
     }
 
-    public AddressAdapter(List<SearchItem> destinations, OnDestinationClickListener listener) {
-        this.destinations = destinations;
+    public AddressAdapter(OnDestinationClickListener listener) {
+        super(DIFF_CALLBACK);
         this.listener = listener;
     }
+
+    private static final DiffUtil.ItemCallback<SearchItem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<SearchItem>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull SearchItem oldItem, @NonNull SearchItem newItem) {
+                    // فرض: title به تنهایی برای تشخیص یکتا بودن کافی است
+                    return oldItem.getTitle().equals(newItem.getTitle());
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull SearchItem oldItem, @NonNull SearchItem newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
     @NonNull
     @Override
@@ -33,13 +47,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Destinat
 
     @Override
     public void onBindViewHolder(@NonNull DestinationViewHolder holder, int position) {
-        SearchItem destination = destinations.get(position);
+        SearchItem destination = getItem(position);
         holder.bind(destination);
-    }
-
-    @Override
-    public int getItemCount() {
-        return destinations != null ? destinations.size() : 0;
     }
 
     class DestinationViewHolder extends RecyclerView.ViewHolder {
