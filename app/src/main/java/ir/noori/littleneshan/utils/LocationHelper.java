@@ -13,12 +13,15 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
+
 public class LocationHelper {
 
     private static volatile LocationHelper instance;
     private final FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private LocationUpdateListener listener;
+    LocationUpdateListener listener;
+
 
     public interface LocationUpdateListener {
         void onLocationUpdated(Location location);
@@ -75,6 +78,7 @@ public class LocationHelper {
             fusedLocationClient.getLastLocation()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful() && task.getResult() != null) {
+                            SharedPreferencesRepository.getInstance().saveLocation(task.getResult().getLatitude(), task.getResult().getLongitude());
                             callback.onLocationUpdated(task.getResult());
                         }
                     });

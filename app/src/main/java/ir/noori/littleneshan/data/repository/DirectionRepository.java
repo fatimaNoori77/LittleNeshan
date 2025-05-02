@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.neshan.common.model.LatLng;
+
 import ir.noori.littleneshan.BuildConfig;
+import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.RouteResponse;
 import ir.noori.littleneshan.data.network.ApiClient;
@@ -48,6 +51,10 @@ public class DirectionRepository {
             }
         });
         return route;
+    }
+
+    public LatLng getCurrentUserLocation(){
+        return new LatLng(SharedPreferencesRepository.getInstance().getLatitude(), SharedPreferencesRepository.getInstance().getLongitude());
     }
 
 }

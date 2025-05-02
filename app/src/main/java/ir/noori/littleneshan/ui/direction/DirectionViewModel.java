@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.neshan.common.model.LatLng;
+
 import java.util.List;
 
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
@@ -78,6 +80,10 @@ public class DirectionViewModel extends ViewModel {
 
     public boolean isLastStep() {
         return currentSteps != null && currentStepIndex >= currentSteps.size() - 1;
+    }
+
+    public LatLng getCurrentUserLocation(){
+        return repository.getCurrentUserLocation();
     }
 
 }

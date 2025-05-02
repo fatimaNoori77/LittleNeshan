@@ -3,27 +3,27 @@ package ir.noori.littleneshan.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class SharedPreferencesUtility {
+public class SharedPreferencesRepository {
 
     private static final String PREF_NAME = "little_neshan_prefs";
     private static final String KEY_LATITUDE = "key_latitude";
     private static final String KEY_LONGITUDE = "key_longitude";
-    private static SharedPreferencesUtility instance;
+    private static SharedPreferencesRepository instance;
+    SharedPreferences.Editor editor;
+    private SharedPreferences sharedPreferences;
 
-    private final SharedPreferences sharedPreferences;
-    private SharedPreferencesUtility(Context context) {
-        sharedPreferences = context.getApplicationContext()
-                .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    public void init(Context context) {
+        sharedPreferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
-    public static synchronized SharedPreferencesUtility getInstance(Context context) {
+    public static synchronized SharedPreferencesRepository getInstance() {
         if (instance == null) {
-            instance = new SharedPreferencesUtility(context);
+            instance = new SharedPreferencesRepository();
         }
         return instance;
     }
     public void saveLocation(double latitude, double longitude) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putFloat(KEY_LATITUDE, (float) latitude);
         editor.putFloat(KEY_LONGITUDE, (float) longitude);
         editor.apply();

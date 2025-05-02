@@ -7,6 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.neshan.common.model.LatLng;
+
 import java.util.List;
 
 import ir.noori.littleneshan.data.local.entity.AddressEntity;
@@ -43,9 +45,9 @@ public class SearchAddressViewModel extends AndroidViewModel {
         return isLoading;
     }
 
-    public void searchAddress(String term, double lat, double lng) {
+    public void searchAddress(String term, LatLng latLng) {
         isLoading.setValue(true);
-        repository.searchAddress(term, lat, lng).observeForever(response -> {
+        repository.searchAddress(term, latLng).observeForever(response -> {
             isLoading.setValue(false);
             if (response != null) {
                 searchResult.setValue(response);
@@ -53,5 +55,9 @@ public class SearchAddressViewModel extends AndroidViewModel {
                 searchResult.setValue(null);
             }
         });
+    }
+
+    public LatLng getCurrentUserLocation(){
+        return repository.getCurrentUserLocation();
     }
 }

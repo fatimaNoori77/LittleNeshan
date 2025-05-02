@@ -2,6 +2,7 @@ package ir.noori.littleneshan.ui.direction;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import org.neshan.mapsdk.model.Polyline;
 import java.util.ArrayList;
 
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.Step;
 import ir.noori.littleneshan.databinding.FragmentDirectionBinding;
@@ -39,7 +39,6 @@ import ir.noori.littleneshan.utils.PolylineDecoder;
 public class DirectionFragment extends Fragment {
     private FragmentDirectionBinding binding;
     private DirectionViewModel viewModel;
-    SharedPreferencesUtility preferences ;
     private final LatLng selectedDestination;
     Polyline overViewPolyline;
     private MapView map;
@@ -53,7 +52,6 @@ public class DirectionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
-        preferences = SharedPreferencesUtility.getInstance(requireContext());
         locationHelper = LocationHelper.getInstance(requireContext());
     }
 
@@ -76,7 +74,7 @@ public class DirectionFragment extends Fragment {
     private void fetchRoutFromApi() {
         RoutRequestInputs inputs = new RoutRequestInputs(
                 "car",
-                preferences.getLatitude() + "," + preferences.getLongitude(),
+                viewModel.getCurrentUserLocation().getLatitude() + "," + viewModel.getCurrentUserLocation().getLongitude(),
                 selectedDestination.getLatitude() + "," + selectedDestination.getLongitude()
         );
         inputs.setAvoidTrafficZone(true);
@@ -109,7 +107,7 @@ public class DirectionFragment extends Fragment {
         viewModel.getRoutResult().observe(getViewLifecycleOwner(), result -> {
             map.moveToCameraBounds(
                     new LatLngBounds(
-                            new LatLng(preferences.getLatitude(), preferences.getLongitude()),
+                            viewModel.getCurrentUserLocation(),
                             new LatLng(selectedDestination.getLatitude(), selectedDestination.getLongitude())),
                     new ScreenBounds(new ScreenPos(0, 0),
                             new ScreenPos(map.getWidth(), map.getHeight())

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
 import ir.noori.littleneshan.data.local.entity.AddressEntity;
 import ir.noori.littleneshan.data.local.entity.mapper.Mapper;
 import ir.noori.littleneshan.data.model.LocationModel;
@@ -33,7 +32,6 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     private FragmentSearchAddressBinding binding;
     private DestinationSelectionListener listener;
     private SearchAddressViewModel viewModel;
-    SharedPreferencesUtility preferences;
 
 
     public interface DestinationSelectionListener {
@@ -58,7 +56,6 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSearchAddressBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(SearchAddressViewModel.class);
-        preferences = SharedPreferencesUtility.getInstance(getContext());
         return binding.getRoot();
     }
 
@@ -175,7 +172,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     private void performSearch() {
         String query = binding.edtDestination.getText().toString().trim();
         if (!query.isEmpty()) {
-            viewModel.searchAddress(query, preferences.getLatitude(), preferences.getLongitude());
+            viewModel.searchAddress(query,viewModel.getCurrentUserLocation());
         }
     }
 

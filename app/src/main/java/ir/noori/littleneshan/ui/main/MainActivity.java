@@ -26,7 +26,6 @@ import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
 
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.local.SharedPreferencesUtility;
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 import ir.noori.littleneshan.ui.direction.DirectionFragment;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity
     private MapView map;
     private Location currentLocation;
     private LatLng selectedDestination;
-    SharedPreferencesUtility preferences;
     LocationHelper locationHelper;
 
     @Override
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity
         getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         setContentView(binding.getRoot());
-        preferences = SharedPreferencesUtility.getInstance(getApplicationContext());
         locationHelper = LocationHelper.getInstance(getApplicationContext());
     }
 
@@ -94,6 +91,7 @@ public class MainActivity extends AppCompatActivity
 
         binding.cardClose.setOnClickListener(v -> {
             moveToCurrentLocation();
+            map.clearMarkers();
             binding.llMoreOptions.setVisibility(View.GONE);
             binding.cardClose.setVisibility(View.GONE);
             binding.edtDestination.getText().clear();
@@ -105,7 +103,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        binding.chipDriving.setOnClickListener(v -> showDirectionFragment());
+        binding.chipDriving.setOnClickListener(v -> {
+            showDirectionFragment();
+            binding.cardClose.performClick();
+        });
 
         binding.chipSave.setOnClickListener(v -> Toast.makeText(this,R.string.copy_address, Toast.LENGTH_SHORT).show());
 
@@ -162,7 +163,6 @@ public class MainActivity extends AppCompatActivity
 
         locationHelper.getLastKnownLocation(location -> {
             currentLocation = location;
-            preferences.saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
             map.setMyLocationEnabled(true);
             map.moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 0);
             map.setZoom(17f, 0);
