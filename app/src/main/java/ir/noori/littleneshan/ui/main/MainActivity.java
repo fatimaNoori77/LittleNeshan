@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
 
 import ir.noori.littleneshan.R;
+import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 import ir.noori.littleneshan.ui.direction.DirectionFragment;
@@ -59,6 +62,9 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         initMap();
+        if(SharedPreferencesRepository.getInstance().isLocationServiceRunning()){
+            navigateToDirectionFragment();
+        }
         initViews();
         checkLocationStatus();
         checkInternetStatus();
@@ -104,8 +110,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         binding.chipDriving.setOnClickListener(v -> {
-            showDirectionFragment();
-            binding.cardClose.performClick();
+            requestPostNotificationPermission();
         });
 
         binding.chipSave.setOnClickListener(v -> Toast.makeText(this,R.string.copy_address, Toast.LENGTH_SHORT).show());
@@ -138,13 +143,14 @@ public class MainActivity extends AppCompatActivity
         binding.cardClose.setVisibility(View.VISIBLE);
     }
 
-    public void showDirectionFragment() {
+    public void navigateToDirectionFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DirectionFragment(selectedDestination))
                 .addToBackStack(null)
                 .commit();
         map.clearMarkers();
+        binding.cardClose.performClick();
     }
 
     private Marker createMarker(LatLng loc) {
@@ -153,6 +159,19 @@ public class MainActivity extends AppCompatActivity
         markStCr.setBitmap(BitmapUtils.createBitmapFromAndroidBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_pin)));
         MarkerStyle markSt = markStCr.buildStyle();
         return new Marker(loc, markSt);
+    }
+
+    private void requestPostNotificationPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this,R.string.give_post_notification_permission, Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, Constants.POST_NOTIFICATION_PERMISSION);
+            }else{
+                navigateToDirectionFragment();
+            }
+        }else{
+            navigateToDirectionFragment();
+        }
     }
 
     private void moveToCurrentLocation() {
@@ -172,10 +191,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Constants.LOCATION_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            moveToCurrentLocation();
-        } else {
-            Toast.makeText(this, "مجوز مکان رد شد", Toast.LENGTH_SHORT).show();
+
+        if (grantResults.length == 0) return; // No permission result to process
+        boolean isGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        switch (requestCode) {
+            case Constants.LOCATION_PERMISSION:
+                if (isGranted) {
+                    moveToCurrentLocation();
+                } else {
+                    Toast.makeText(this, R.string.location_permission_rejected, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case Constants.POST_NOTIFICATION_PERMISSION:
+                if (isGranted) {
+                    navigateToDirectionFragment();
+                } else {
+                    Toast.makeText(this, R.string.post_notification_permission_rejected, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                Log.w("Permission", "Unhandled permission request code: " + requestCode);
         }
     }
 }

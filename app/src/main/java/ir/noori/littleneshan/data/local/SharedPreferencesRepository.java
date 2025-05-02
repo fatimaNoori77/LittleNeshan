@@ -8,6 +8,7 @@ public class SharedPreferencesRepository {
     private static final String PREF_NAME = "little_neshan_prefs";
     private static final String KEY_LATITUDE = "key_latitude";
     private static final String KEY_LONGITUDE = "key_longitude";
+    private static final String KEY_IS_LOCATION_SERVICE_RUNNING = "key_is_location_service_running";
     private static SharedPreferencesRepository instance;
     SharedPreferences.Editor editor;
     private SharedPreferences sharedPreferences;
@@ -27,6 +28,15 @@ public class SharedPreferencesRepository {
         editor.putFloat(KEY_LATITUDE, (float) latitude);
         editor.putFloat(KEY_LONGITUDE, (float) longitude);
         editor.apply();
+    }
+
+    public void setLocationServiceRunning(Boolean isRun){
+        editor.putBoolean(KEY_IS_LOCATION_SERVICE_RUNNING, isRun);
+        editor.apply();
+    }
+
+    public Boolean isLocationServiceRunning(){
+        return sharedPreferences.getBoolean(KEY_IS_LOCATION_SERVICE_RUNNING, false);
     }
 
     public double getLatitude() {

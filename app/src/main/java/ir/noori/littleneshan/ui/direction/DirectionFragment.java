@@ -1,8 +1,9 @@
 package ir.noori.littleneshan.ui.direction;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import ir.noori.littleneshan.R;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.Step;
+import ir.noori.littleneshan.data.service.LocationForegroundService;
 import ir.noori.littleneshan.databinding.FragmentDirectionBinding;
 import ir.noori.littleneshan.utils.LocationHelper;
 import ir.noori.littleneshan.utils.PolylineDecoder;
@@ -71,6 +73,64 @@ public class DirectionFragment extends Fragment {
         fetchRoutFromApi();
     }
 
+    void initViews(){
+        binding.cardGPS.setOnClickListener(v -> {
+
+        });
+
+        binding.btnEnd.setOnClickListener(v -> {
+            locationHelper.stopLocationUpdates();
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
+
+        binding.btnStart.setOnClickListener(v -> {
+            startLocationService();
+            viewModel.nextStep();
+            binding.viewFlipper.setDisplayedChild(1);
+            map.setTilt(60.0f, 0f);
+            map.setZoom(20f, 0f);
+        });
+    }
+
+    private void initObservers() {
+        viewModel.getRoutResult().observe(getViewLifecycleOwner(), result -> {
+            map.moveToCameraBounds(
+                    new LatLngBounds(
+                            viewModel.getCurrentUserLocation(),
+                            new LatLng(selectedDestination.getLatitude(), selectedDestination.getLongitude())),
+                    new ScreenBounds(new ScreenPos(0, 0),
+                            new ScreenPos(map.getWidth(), map.getHeight())
+                    ),
+                    true, 0.25f);
+        });
+
+        viewModel.getStepsLiveData().observe(getViewLifecycleOwner(), steps -> {
+            if(steps == null){
+                Toast.makeText(requireContext(), R.string.routing_error, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (overViewPolyline != null)
+                map.removePolyline(overViewPolyline);
+            for (Step step : steps) {
+                ArrayList<LatLng> path = new PolylineDecoder().decodePoly(step.getPolyline());
+                overViewPolyline = new Polyline(path, getLineStyle());
+                map.addPolyline(overViewPolyline);
+            }
+        });
+
+        viewModel.getInstructionLiveData().observe(getViewLifecycleOwner(), step -> {
+            binding.txtInstructions.setText(step.getInstruction());
+            // just for example
+            if(step.getModifier().contains("right")){
+                binding.imgDirection.setImageResource(R.drawable.direction_right);
+            }else if(step.getModifier().contains("left")){
+                binding.imgDirection.setImageResource(R.drawable.direction_left);
+            }else{
+                binding.imgDirection.setImageResource(R.drawable.direction_direct);
+            }
+        });
+    }
+
     private void fetchRoutFromApi() {
         RoutRequestInputs inputs = new RoutRequestInputs(
                 "car",
@@ -103,61 +163,13 @@ public class DirectionFragment extends Fragment {
         return new Marker(loc, markSt);
     }
 
-    private void initObservers() {
-        viewModel.getRoutResult().observe(getViewLifecycleOwner(), result -> {
-            map.moveToCameraBounds(
-                    new LatLngBounds(
-                            viewModel.getCurrentUserLocation(),
-                            new LatLng(selectedDestination.getLatitude(), selectedDestination.getLongitude())),
-                    new ScreenBounds(new ScreenPos(0, 0),
-                            new ScreenPos(map.getWidth(), map.getHeight())
-                    ),
-                    true, 0.25f);
-            map.setTilt(60.0f, 0f);
-        });
-
-        viewModel.getStepsLiveData().observe(getViewLifecycleOwner(), steps -> {
-            if(steps == null){
-                Toast.makeText(requireContext(), R.string.routing_error, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (overViewPolyline != null)
-                map.removePolyline(overViewPolyline);
-            for (Step step : steps) {
-                ArrayList<LatLng> path = new PolylineDecoder().decodePoly(step.getPolyline());
-                overViewPolyline = new Polyline(path, getLineStyle());
-                map.addPolyline(overViewPolyline);
-            }
-        });
-
-        viewModel.getInstructionLiveData().observe(getViewLifecycleOwner(), step -> {
-            binding.txtInstructions.setText(step.getInstruction());
-            // just for example
-            if(step.getModifier().contains("right")){
-                binding.imgDirection.setImageResource(R.drawable.direction_right);
-            }else if(step.getModifier().contains("left")){
-                binding.imgDirection.setImageResource(R.drawable.direction_left);
-            }else{
-                binding.imgDirection.setImageResource(R.drawable.direction_direct);
-            }
-        });
-    }
-
-    void initViews(){
-        binding.cardGPS.setOnClickListener(v -> {
-
-        });
-
-        binding.btnEnd.setOnClickListener(v -> {
-            locationHelper.stopLocationUpdates();
-            requireActivity().getSupportFragmentManager().popBackStack();
-        });
-
-        binding.btnStart.setOnClickListener(v -> {
-            startLocationUpdate();
-            viewModel.nextStep();
-            binding.viewFlipper.setDisplayedChild(1);
-        });
+    private void startLocationService() {
+        Intent intent = new Intent(requireContext(), LocationForegroundService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().startForegroundService(intent);
+        } else {
+            requireActivity().startService(intent);
+        }
     }
 
     private void initMap() {
@@ -173,11 +185,16 @@ public class DirectionFragment extends Fragment {
         return lineStCr.buildStyle();
     }
 
+    private void stopLocationService() {
+        Intent intent = new Intent(requireContext(), LocationForegroundService.class);
+        requireActivity().stopService(intent);
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         locationHelper.stopLocationUpdates();
-
     }
 
     @Override

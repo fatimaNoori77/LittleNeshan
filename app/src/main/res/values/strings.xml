@@ -19,4 +19,8 @@
     <string name="doctors">چهارراه دکتری کافه نون</string>
     <string name="not_found">موردی یافت نشد! :(</string>
     <string name="internet_warning">اتصال اینترنت برقرار نیست</string>
+    <string name="location_notification_content">نشانک در حال مسیریابی میباشد</string>
+    <string name="location_permission_rejected">مجوز مکان رد شد</string>
+    <string name="post_notification_permission_rejected">مجوز ارسال اعلان رد شد</string>
+    <string name="give_post_notification_permission">لطفا مجوز ارسال نوتیفیکیشن را به برنامه بدهید.</string>
 </resources>

@@ -53,7 +53,6 @@ public class DirectionViewModel extends ViewModel {
 
                     if (!steps.isEmpty()) {
                         currentStepIndex = 0;
-                        instructionLiveData.setValue(steps.get(0));
                     }
                 } else {
                     routResult.setValue(null);
