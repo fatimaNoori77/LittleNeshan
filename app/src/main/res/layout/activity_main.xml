@@ -61,8 +61,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/edtDestination"
+        <TextView
+            android:id="@+id/txtDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_10sdp"
@@ -78,7 +78,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edtDestination"
+            android:layout_below="@id/txtDestination"
             android:orientation="horizontal">
 
             <com.google.android.material.chip.ChipGroup

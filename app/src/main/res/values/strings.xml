@@ -13,7 +13,7 @@
     <string name="copy_address">مثلا آدرس در حافظه کپی شد ;)</string>
     <string name="share_address">مثلا آدرس ارسال شد ;)</string>
     <string name="routing_error">خطا در مسیر یابی، لطفا مقصد را تغییر دهید.</string>
-    <string name="turn_on_gps">موقعیت مکانی خو را روشن کنید</string>
+    <string name="turn_on_gps">موقعیت مکانی خود را روشن کنید</string>
     <string name="press_start_trip">روی دکمه شروع سفر کلیک کنید</string>
     <string name="seyyed_razi">سید رضی ۴۹ بعد از چهارراه اول</string>
     <string name="doctors">چهارراه دکتری کافه نون</string>

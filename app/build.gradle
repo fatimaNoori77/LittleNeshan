@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "ir.noori.littleneshan"
         minSdk 23
-        targetSdk 35
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -20,7 +20,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,14 +35,14 @@ android {
         buildConfig true
     }
 
-//    splits {
-//        abi {
-//            enable true
-//            reset()
-//            include 'armeabi-v7a'
-//            universalApk false
-//        }
-//    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a'
+            universalApk false
+        }
+    }
 }
 
 dependencies {

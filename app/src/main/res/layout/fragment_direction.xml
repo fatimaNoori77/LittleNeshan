@@ -54,7 +54,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_50sdp"
         app:cardElevation="@dimen/_3sdp"
-        app:layout_constraintBottom_toTopOf="@id/cardAddress"
+        app:layout_constraintBottom_toTopOf="@id/cardView"
         app:layout_constraintStart_toStartOf="parent">
 
     <ImageView
@@ -65,15 +65,16 @@
 
     </androidx.cardview.widget.CardView>
 
-    <RelativeLayout
-        android:id="@+id/cardAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp"
-        android:gravity="center"
-        android:background="@drawable/bg_white_top_corner"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/white"
+        android:elevation="@dimen/_3sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ViewFlipper
             android:id="@+id/viewFlipper"
@@ -104,6 +105,6 @@
 
         </ViewFlipper>
 
-    </RelativeLayout>
+    </androidx.cardview.widget.CardView>>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

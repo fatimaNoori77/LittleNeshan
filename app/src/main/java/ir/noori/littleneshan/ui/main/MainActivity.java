@@ -100,14 +100,10 @@ public class MainActivity extends AppCompatActivity
             map.clearMarkers();
             binding.llMoreOptions.setVisibility(View.GONE);
             binding.cardClose.setVisibility(View.GONE);
-            binding.edtDestination.getText().clear();
+            binding.txtDestination.setText("");
         });
 
-        binding.edtDestination.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                showDestinationSearchBottomSheet();
-            }
-        });
+        binding.txtDestination.setOnClickListener(v -> showDestinationSearchBottomSheet());
 
         binding.chipDriving.setOnClickListener(v -> {
             requestPostNotificationPermission();
@@ -119,7 +115,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showDestinationSearchBottomSheet() {
-        binding.edtDestination.clearFocus();
+        binding.txtDestination.clearFocus();
         final String TAG = SearchAddressFragment.TAG;
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment existingFragment = fragmentManager.findFragmentByTag(TAG);
@@ -132,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onDestinationSelected(SearchItem destination) {
-        binding.edtDestination.setText(destination.getAddress());
+        binding.txtDestination.setText(destination.getAddress());
         selectedDestination = new LatLng(destination.getLocation().getY(), destination.getLocation().getX());
         map.moveCamera(selectedDestination, 0);
         Marker marker = createMarker(selectedDestination);
