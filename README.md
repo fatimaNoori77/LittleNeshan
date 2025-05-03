@@ -36,9 +36,9 @@ and provides a simple driving mode with dynamic instructions.
 
 ## 📸 Screenshots
 
-<img src="asset/home-screen.png" width="250"/>
-<img src="asset/search-address.png" width="250"/>
-<img src="asset/navigation.png" width="250"/>
+<img src="asset/img1.png" width="250" alt="home screen"/>
+<img src="asset/img2.png" width="250" alt="navigation overview"/>
+<img src="asset/img3.png" width="250" alt="address search result"/>
 
 ---
 
