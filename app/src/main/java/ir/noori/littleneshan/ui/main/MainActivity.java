@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         initMap();
+//        here I must check if the user is in navigating mode, open the navigation page but I don't have enough time!
 //        if(SharedPreferencesRepository.getInstance().isLocationServiceRunning()){
 //            navigateToDirectionFragment();
 //        }
@@ -213,5 +214,11 @@ public class MainActivity extends AppCompatActivity
             default:
                 Log.w("Permission", "Unhandled permission request code: " + requestCode);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

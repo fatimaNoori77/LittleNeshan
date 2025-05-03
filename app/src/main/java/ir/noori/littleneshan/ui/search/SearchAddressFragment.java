@@ -94,7 +94,13 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
             return true;
         });
         SearchTextWatcher.attachTo(binding.edtDestination, query -> performSearch());
-        binding.imgClose.setOnClickListener(v -> dismiss());
+        binding.imgClose.setOnClickListener(v -> {
+            if(binding.edtDestination.getText().toString().trim().isEmpty()){
+                dismiss();
+            }else{
+                binding.edtDestination.setText("");
+            }
+        });
         binding.chipHome.setOnClickListener(v -> {
             LocationModel location = new LocationModel(59.606050921164695, 36.29799544485502);
 

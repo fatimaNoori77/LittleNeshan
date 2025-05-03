@@ -38,7 +38,7 @@ public class SearchTextWatcher implements TextWatcher {
         final String query = s.toString().trim();
 
         searchRunnable = () -> {
-            if (!query.isEmpty()) {
+            if (!query.isEmpty() && query.length() >= 3) {
                 callback.onSearch(query);
             }
         };

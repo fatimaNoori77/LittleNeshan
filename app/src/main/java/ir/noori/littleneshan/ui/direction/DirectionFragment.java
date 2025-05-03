@@ -60,7 +60,7 @@ public class DirectionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDirectionBinding.inflate(inflater, container, false);
-
+        fetchRoutFromApi();
         return binding.getRoot();
     }
 
@@ -70,7 +70,6 @@ public class DirectionFragment extends Fragment {
         initMap();
         initViews();
         initObservers();
-        fetchRoutFromApi();
     }
 
     void initViews(){
@@ -116,8 +115,9 @@ public class DirectionFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.routing_error, Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (overViewPolyline != null)
+            if (overViewPolyline != null){
                 map.removePolyline(overViewPolyline);
+            }
             for (Step step : steps) {
                 ArrayList<LatLng> path = new PolylineDecoder().decodePoly(step.getPolyline());
                 overViewPolyline = new Polyline(path, getLineStyle());
@@ -153,11 +153,16 @@ public class DirectionFragment extends Fragment {
         locationHelper.startLocationUpdates(location -> {
             double lat = location.getLatitude();
             double lng = location.getLongitude();
+            float bearing = location.getBearing();
             map.moveCamera(new LatLng(lat, lng), 0);
             map.setZoom(17f, 0);
             Marker marker = createMarker(new LatLng(lat, lng));
             map.clearMarkers();
             map.addMarker(marker);
+            map.enableUserMarkerRotation(marker);
+
+            // just for show... :)
+            viewModel.nextStep();
         });
     }
 
@@ -196,17 +201,16 @@ public class DirectionFragment extends Fragment {
         requireActivity().stopService(intent);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
+        binding = null;
         locationHelper.stopLocationUpdates();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // when the user press home button or lock the phone
         locationHelper.stopLocationUpdates();
     }
 }
