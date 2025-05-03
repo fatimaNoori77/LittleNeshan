@@ -75,20 +75,27 @@ public class DirectionFragment extends Fragment {
 
     void initViews(){
         binding.cardGPS.setOnClickListener(v -> {
-
+            moveToCurrentLocation();
         });
 
         binding.btnEnd.setOnClickListener(v -> {
-            locationHelper.stopLocationUpdates();
+            stopLocationService();
             requireActivity().getSupportFragmentManager().popBackStack();
         });
 
         binding.btnStart.setOnClickListener(v -> {
             startLocationService();
+            startLocationUpdate();
             viewModel.nextStep();
             binding.viewFlipper.setDisplayedChild(1);
             map.setTilt(60.0f, 0f);
-            map.setZoom(20f, 0f);
+        });
+    }
+
+    private void moveToCurrentLocation() {
+        locationHelper.getLastKnownLocation(location -> {
+            map.moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), 0);
+            map.setZoom(17f, 0);
         });
     }
 
@@ -148,7 +155,6 @@ public class DirectionFragment extends Fragment {
             double lng = location.getLongitude();
             map.moveCamera(new LatLng(lat, lng), 0);
             map.setZoom(17f, 0);
-            map.setBearing(180.0f, 0f);
             Marker marker = createMarker(new LatLng(lat, lng));
             map.clearMarkers();
             map.addMarker(marker);

@@ -29,7 +29,7 @@ public class LocationForegroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground(NOTIFICATION_ID, NotificationUtils.getLocationNotification(this));
 
-        locationHelper.startLocationUpdates(location -> SharedPreferencesRepository.getInstance().saveLocation(location.getLatitude(), location.getLongitude()));
+//        locationHelper.startLocationUpdates(location -> SharedPreferencesRepository.getInstance().saveLocation(location.getLatitude(), location.getLongitude()));
 
         return START_STICKY;
     }

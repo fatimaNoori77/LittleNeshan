@@ -28,7 +28,6 @@ import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
 
 import ir.noori.littleneshan.R;
-import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
 import ir.noori.littleneshan.ui.direction.DirectionFragment;
@@ -62,9 +61,9 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         initMap();
-        if(SharedPreferencesRepository.getInstance().isLocationServiceRunning()){
-            navigateToDirectionFragment();
-        }
+//        if(SharedPreferencesRepository.getInstance().isLocationServiceRunning()){
+//            navigateToDirectionFragment();
+//        }
         initViews();
         checkLocationStatus();
         checkInternetStatus();
