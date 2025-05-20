@@ -27,7 +27,6 @@ public class AddressAdapter extends ListAdapter<SearchItem, AddressAdapter.Desti
             new DiffUtil.ItemCallback<SearchItem>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull SearchItem oldItem, @NonNull SearchItem newItem) {
-                    // فرض: title به تنهایی برای تشخیص یکتا بودن کافی است
                     return oldItem.getTitle().equals(newItem.getTitle());
                 }
 

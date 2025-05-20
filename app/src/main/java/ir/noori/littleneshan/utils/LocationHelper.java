@@ -5,41 +5,32 @@ import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 
+@Singleton
 public class LocationHelper {
 
-    private static volatile LocationHelper instance;
     private final FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    LocationUpdateListener listener;
-
+    private LocationUpdateListener listener;
 
     public interface LocationUpdateListener {
         void onLocationUpdated(Location location);
     }
 
-    private LocationHelper(Context context) {
+    @Inject
+    public LocationHelper(@ApplicationContext Context context) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context.getApplicationContext());
-    }
-
-    public static LocationHelper getInstance(Context context) {
-        if (instance == null) {
-            synchronized (LocationHelper.class) {
-                if (instance == null) {
-                    instance = new LocationHelper(context);
-                }
-            }
-        }
-        return instance;
     }
 
     public void startLocationUpdates(LocationUpdateListener listener) {
@@ -48,21 +39,20 @@ public class LocationHelper {
         locationRequest.setInterval(5000);
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                if (listener != null) {
+            public void onLocationResult(LocationResult locationResult) {
+                if (listener != null && locationResult.getLastLocation() != null) {
                     listener.onLocationUpdated(locationResult.getLastLocation());
                 }
             }
         };
+
         try {
-            fusedLocationClient.requestLocationUpdates(locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper());
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         } catch (SecurityException e) {
-            Log.e("TAG", "startLocationUpdates: " + e.getMessage());
+            Log.e("LocationHelper", "startLocationUpdates: " + e.getMessage());
         }
     }
 
@@ -78,12 +68,14 @@ public class LocationHelper {
             fusedLocationClient.getLastLocation()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful() && task.getResult() != null) {
-                            SharedPreferencesRepository.getInstance().saveLocation(task.getResult().getLatitude(), task.getResult().getLongitude());
+                            SharedPreferencesRepository.getInstance().saveLocation(
+                                    task.getResult().getLatitude(), task.getResult().getLongitude()
+                            );
                             callback.onLocationUpdated(task.getResult());
                         }
                     });
         } catch (SecurityException e) {
-            Log.e("TAG", "getLastKnownLocation: " + e.getMessage());
+            Log.e("LocationHelper", "getLastKnownLocation: " + e.getMessage());
         }
     }
 }

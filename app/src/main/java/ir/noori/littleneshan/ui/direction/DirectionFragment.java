@@ -30,6 +30,9 @@ import org.neshan.mapsdk.model.Polyline;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import ir.noori.littleneshan.R;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.Step;
@@ -38,12 +41,14 @@ import ir.noori.littleneshan.databinding.FragmentDirectionBinding;
 import ir.noori.littleneshan.utils.LocationHelper;
 import ir.noori.littleneshan.utils.PolylineDecoder;
 
+@AndroidEntryPoint
 public class DirectionFragment extends Fragment {
     private FragmentDirectionBinding binding;
     private DirectionViewModel viewModel;
     private final LatLng selectedDestination;
     Polyline overViewPolyline;
     private MapView map;
+    @Inject
     LocationHelper locationHelper;
 
     public DirectionFragment(LatLng selectedDestination) {
@@ -54,7 +59,6 @@ public class DirectionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DirectionViewModel.class);
-        locationHelper = LocationHelper.getInstance(requireContext());
     }
 
     @Override

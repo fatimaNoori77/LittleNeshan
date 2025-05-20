@@ -9,18 +9,22 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.utils.LocationHelper;
 import ir.noori.littleneshan.utils.NotificationUtils;
 
+@AndroidEntryPoint
 public class LocationForegroundService extends Service {
     private static final int NOTIFICATION_ID = 1;
-    private LocationHelper locationHelper;
+    @Inject
+    LocationHelper locationHelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        locationHelper = LocationHelper.getInstance(this);
         SharedPreferencesRepository.getInstance().setLocationServiceRunning(true);
         createNotificationChannel();
     }

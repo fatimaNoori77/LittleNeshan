@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.neshan.common.model.LatLng;
 
+import javax.inject.Inject;
+
 import ir.noori.littleneshan.BuildConfig;
 import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
@@ -19,6 +21,7 @@ import retrofit2.Response;
 public class DirectionRepository {
     private final ApiService apiService;
 
+    @Inject
     public DirectionRepository() {
         this.apiService = ApiClient.getClient().create(ApiService.class);
     }

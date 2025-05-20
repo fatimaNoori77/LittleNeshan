@@ -10,14 +10,19 @@ import org.neshan.common.model.LatLng;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import ir.noori.littleneshan.data.model.RoutRequestInputs;
 import ir.noori.littleneshan.data.model.RouteResponse;
 import ir.noori.littleneshan.data.model.Step;
 import ir.noori.littleneshan.data.repository.DirectionRepository;
 
+@HiltViewModel
 public class DirectionViewModel extends ViewModel {
 
     private final DirectionRepository repository;
+    @Inject
     public DirectionViewModel() {
         this.repository = new DirectionRepository();
     }

@@ -1,7 +1,5 @@
 package ir.noori.littleneshan.data.repository;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,13 +9,13 @@ import org.neshan.common.model.LatLng;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
 import ir.noori.littleneshan.BuildConfig;
 import ir.noori.littleneshan.data.local.AddressDao;
-import ir.noori.littleneshan.data.local.AppDatabase;
 import ir.noori.littleneshan.data.local.SharedPreferencesRepository;
 import ir.noori.littleneshan.data.local.entity.AddressEntity;
 import ir.noori.littleneshan.data.model.SearchResponse;
-import ir.noori.littleneshan.data.network.ApiClient;
 import ir.noori.littleneshan.data.network.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,10 +25,10 @@ public class SearchRepository {
     private final ApiService apiService;
     private final AddressDao addressDao;
 
-    public SearchRepository(Context context) {
-        this.apiService = ApiClient.getClient().create(ApiService.class);
-        AppDatabase db = AppDatabase.getInstance(context);
-        addressDao = db.addressDao();
+    @Inject
+    public SearchRepository(ApiService apiService, AddressDao addressDao) {
+        this.apiService = apiService;
+        this.addressDao = addressDao;
     }
 
     public void insertAddress(AddressEntity address) {

@@ -1,28 +1,29 @@
 package ir.noori.littleneshan.ui.search;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import org.neshan.common.model.LatLng;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import ir.noori.littleneshan.data.local.entity.AddressEntity;
 import ir.noori.littleneshan.data.model.SearchResponse;
 import ir.noori.littleneshan.data.repository.SearchRepository;
 
-public class SearchAddressViewModel extends AndroidViewModel {
+@HiltViewModel
+public class SearchAddressViewModel extends ViewModel {
     private final SearchRepository repository;
     private final MutableLiveData<SearchResponse> searchResult = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
-    public SearchAddressViewModel(@NonNull Application application) {
-        super(application);
-        this.repository = new SearchRepository(application);
+    @Inject
+    public SearchAddressViewModel(SearchRepository searchRepository) {
+        this.repository = searchRepository;
         allAddresses = repository.getAllAddresses();
 
     }

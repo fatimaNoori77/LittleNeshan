@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import ir.noori.littleneshan.R;
 import ir.noori.littleneshan.data.local.entity.AddressEntity;
 import ir.noori.littleneshan.data.local.entity.mapper.Mapper;
@@ -25,6 +26,7 @@ import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.FragmentSearchAddressBinding;
 import ir.noori.littleneshan.utils.SearchTextWatcher;
 
+@AndroidEntryPoint
 public class SearchAddressFragment extends BottomSheetDialogFragment {
     public static final String TAG = SearchAddressFragment.class.getSimpleName();
     AddressAdapter adapter;
@@ -46,7 +48,7 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialog);
-
+        viewModel = new ViewModelProvider(this).get(SearchAddressViewModel.class);
     }
 
     @Nullable
@@ -55,7 +57,6 @@ public class SearchAddressFragment extends BottomSheetDialogFragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSearchAddressBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(SearchAddressViewModel.class);
         return binding.getRoot();
     }
 

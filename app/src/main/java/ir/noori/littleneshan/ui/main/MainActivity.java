@@ -27,6 +27,9 @@ import org.neshan.mapsdk.MapView;
 import org.neshan.mapsdk.internal.utils.BitmapUtils;
 import org.neshan.mapsdk.model.Marker;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import ir.noori.littleneshan.R;
 import ir.noori.littleneshan.data.model.SearchItem;
 import ir.noori.littleneshan.databinding.ActivityMainBinding;
@@ -37,12 +40,14 @@ import ir.noori.littleneshan.utils.CheckLocationEnable;
 import ir.noori.littleneshan.utils.Constants;
 import ir.noori.littleneshan.utils.LocationHelper;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity
         implements SearchAddressFragment.DestinationSelectionListener {
     private ActivityMainBinding binding;
     private MapView map;
     private Location currentLocation;
     private LatLng selectedDestination;
+    @Inject
     LocationHelper locationHelper;
 
     @Override
@@ -54,7 +59,6 @@ public class MainActivity extends AppCompatActivity
         getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         setContentView(binding.getRoot());
-        locationHelper = LocationHelper.getInstance(getApplicationContext());
     }
 
     @Override
